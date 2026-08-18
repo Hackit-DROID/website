@@ -1,10 +1,17 @@
+import { useState } from 'react';
+import { LayoutGroup } from 'framer-motion';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
 import FacultyCard from '../components/FacultyCard';
-import LeadershipCard from '../components/LeadershipCard';
-import MemberCard from '../components/MemberCard';
+import ExpandableMemberCard from '../components/ExpandableMemberCard';
 import { faculty, leadership, coreCommittee } from '../data/teamData';
 
 export function Team() {
+  const [selectedMemberId, setSelectedMemberId] = useState(null);
+
+  const handleCardClick = (id) => {
+    setSelectedMemberId(prevId => prevId === id ? null : id);
+  };
+
   return (
     <main className="min-h-screen bg-background text-text-primary pt-24 pb-20 font-sans antialiased">
       {/* Faculty */}
@@ -40,13 +47,29 @@ export function Team() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {leadership.map((member, index) => (
-              <AnimatedCard key={member.name} index={index}>
-                <LeadershipCard member={member} />
-              </AnimatedCard>
-            ))}
-          </div>
+          <LayoutGroup id="leadership-grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-max">
+              {leadership.map((member, index) => (
+                <AnimatedCard 
+                  key={member.id} 
+                  index={index}
+                  layout={true}
+                  className={`no-layout-transition h-fit
+                    ${selectedMemberId === member.id 
+                      ? 'col-span-1 sm:col-span-2 lg:col-span-3' 
+                      : 'col-span-1'
+                    }`}
+                >
+                  <ExpandableMemberCard 
+                    member={member} 
+                    isSelected={selectedMemberId === member.id}
+                    onClick={() => handleCardClick(member.id)}
+                    isLeadership={true}
+                  />
+                </AnimatedCard>
+              ))}
+            </div>
+          </LayoutGroup>
         </section>
       </div>
 
@@ -62,13 +85,29 @@ export function Team() {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
-          {coreCommittee.map((member, index) => (
-            <AnimatedCard key={member.name} index={index}>
-              <MemberCard member={member} />
-            </AnimatedCard>
-          ))}
-        </div>
+        <LayoutGroup id="core-grid">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-max">
+            {coreCommittee.map((member, index) => (
+              <AnimatedCard 
+                key={member.id} 
+                index={index}
+                layout={true}
+                className={`no-layout-transition h-fit
+                  ${selectedMemberId === member.id 
+                    ? 'col-span-1 sm:col-span-2 lg:col-span-3' 
+                    : 'col-span-1'
+                  }`}
+              >
+                <ExpandableMemberCard 
+                  member={member} 
+                  isSelected={selectedMemberId === member.id}
+                  onClick={() => handleCardClick(member.id)}
+                  isLeadership={false}
+                />
+              </AnimatedCard>
+            ))}
+          </div>
+        </LayoutGroup>
       </section>
     </main>
   );

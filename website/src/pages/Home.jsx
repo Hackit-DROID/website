@@ -1,11 +1,8 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
-import JoinModal from '../components/JoinModal';
 import { milestonesData } from '../data/eventsData';
 
 export function Home() {
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   const focusAreas = [
     {
@@ -33,10 +30,6 @@ export function Home() {
   return (
     <div className="bg-background text-text-primary min-h-screen font-sans antialiased">
       <main className="pt-24 pb-20">
-        <JoinModal 
-          isOpen={isJoinModalOpen} 
-          onClose={() => setIsJoinModalOpen(false)} 
-        />
 
         {/* Hero Section */}
         <AnimatedSection className="max-w-6xl mx-auto px-4 sm:px-8 py-20 md:py-28 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -58,12 +51,12 @@ export function Home() {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                onClick={() => setIsJoinModalOpen(true)}
+              <Link
+                to="/community"
                 className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft hover:shadow-md active:scale-[0.98]"
               >
-                Join HackIT Community
-              </button>
+                Explore Community
+              </Link>
               <Link
                 to="/events"
                 className="px-7 py-3.5 bg-surface text-text-primary hover:bg-surface-secondary border border-border hover:border-border-hover font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft active:scale-[0.98]"
@@ -162,22 +155,31 @@ export function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {milestonesData.map((evt, idx) => (
               <AnimatedCard key={evt.id} index={idx}>
-                <div className="bg-surface border border-border p-6 h-full flex flex-col justify-between card-hover shadow-soft rounded-[24px] hover:border-border-hover">
+                <Link
+                  to={`/events/${evt.slug}`}
+                  className="block bg-surface border border-border p-6 h-full flex flex-col justify-between card-hover shadow-soft rounded-[24px] hover:border-border-hover group transition-all duration-300 cursor-pointer"
+                >
                   <div>
                     <div className="flex items-center justify-between text-xs text-text-secondary mb-5">
-                      <span className="px-3.5 py-1 bg-accent-subtle text-accent font-bold rounded-full">
+                      <span className="px-3.5 py-1 bg-accent-subtle text-accent font-bold rounded-full uppercase">
                         {evt.category}
                       </span>
                       <span className="font-semibold">{evt.date}</span>
                     </div>
-                    <h3 className="font-sans text-lg font-bold text-text-primary mb-3 leading-snug">{evt.title}</h3>
+                    <h3 className="font-sans text-lg font-bold text-text-primary group-hover:text-accent transition-colors mb-3 leading-snug">{evt.title}</h3>
                     <p className="text-sm text-text-secondary leading-relaxed mb-5">{evt.summary}</p>
                   </div>
-                  <div className="pt-4 border-t border-surface-secondary text-xs text-text-secondary flex items-center gap-1.5 font-medium">
-                    <span className="material-symbols-outlined text-sm text-accent">location_on</span>
-                    <span>{evt.venue}</span>
+                  <div className="pt-4 border-t border-surface-secondary text-xs text-text-secondary flex items-center justify-between font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+                      <span>{evt.venue}</span>
+                    </div>
+                    <span className="text-accent group-hover:text-accent-hover font-bold flex items-center gap-1.5 transition-all">
+                      Read Story
+                      <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform duration-300">arrow_forward</span>
+                    </span>
                   </div>
-                </div>
+                </Link>
               </AnimatedCard>
             ))}
           </div>
@@ -190,7 +192,7 @@ export function Home() {
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-accent rounded-b-[4px]"></div>
               
               <h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-text-primary uppercase tracking-tight mb-4">
-                Join SGGSIE&T&apos;s Engineering Community
+                SGGSIE&T&apos;s Student Engineering Community
               </h3>
 
               <p className="text-sm text-text-secondary max-w-xl mx-auto mb-8 leading-relaxed">
@@ -198,12 +200,12 @@ export function Home() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={() => setIsJoinModalOpen(true)}
+                <Link
+                  to="/community"
                   className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft active:scale-[0.98]"
                 >
-                  Apply to Join
-                </button>
+                  View Recruitment Status
+                </Link>
                 <Link
                   to="/team"
                   className="px-7 py-3.5 bg-surface-secondary text-text-primary hover:bg-border border border-border font-sans text-sm font-bold transition-all rounded-[16px] active:scale-[0.98]"

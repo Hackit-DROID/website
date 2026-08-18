@@ -1,24 +1,18 @@
 import { useState } from 'react';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
-import JoinModal from '../components/JoinModal';
 import { 
   communityPhilosophy, 
   howWeLearn, 
   domainsExplored, 
-  recruitmentConfig, 
-  socialLinks 
+  recruitmentConfig 
 } from '../data/communityData';
+import { Github, Linkedin, Discord } from '../components/SocialIcons';
 
 export function Community() {
   const [activeCard, setActiveCard] = useState(null);
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   return (
     <main className="min-h-screen bg-background text-text-primary pt-24 pb-20 font-sans antialiased">
-      <JoinModal 
-        isOpen={isJoinModalOpen} 
-        onClose={() => setIsJoinModalOpen(false)} 
-      />
 
       {/* Section 1: Hero & Philosophy */}
       <AnimatedSection className="max-w-6xl mx-auto px-4 sm:px-8 pt-8 pb-16">
@@ -164,37 +158,54 @@ export function Community() {
         </section>
       </div>
 
-      {/* Section 5: CTA & Socials */}
+      {/* Section 5: Recruitment Status & Socials */}
       <section className="max-w-6xl mx-auto px-4 sm:px-8 py-20">
         <AnimatedSection>
           <div className="bg-surface border border-border p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-soft rounded-[28px]">
+            <span className="inline-block px-3.5 py-1 bg-error/10 text-error text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full mb-4">
+              Recruitment Status: CLOSED
+            </span>
+
             <h3 className="font-sans text-2xl sm:text-3xl font-bold text-text-primary uppercase mb-4">
-              Become part of HackIT
+              Membership Recruitment
             </h3>
 
-            <p className="text-sm text-text-secondary max-w-md mx-auto mb-8 leading-relaxed">
-              Interested in cybersecurity, programming, projects, or technical competitions? Follow HackIT and join when recruitment opens.
+            <p className="text-sm text-text-secondary max-w-xl mx-auto mb-8 leading-relaxed">
+              Recruitment is conducted once every academic year through an application, screening, and interview process.
+              Future recruitment announcements will be published through official HackIT and SGGSIE&T communication channels.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {socialLinks.map((social) => (
+            <div className="flex flex-col items-center justify-center gap-4">
+              <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest block mb-2">Connect & Follow</span>
+              <div className="flex items-center gap-4">
                 <a
-                  key={social.name}
-                  href={social.url}
+                  href="https://discord.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5.5 py-3 bg-surface-secondary hover:bg-surface text-text-primary border border-border hover:border-border-hover text-sm font-bold rounded-[14px] transition-all flex items-center gap-2"
+                  className="social-icon-btn w-11 h-11"
+                  aria-label="Join our Discord Server"
                 >
-                  <span className="material-symbols-outlined text-sm">{social.icon}</span>
-                  <span>{social.name}</span>
+                  <Discord size={20} />
                 </a>
-              ))}
-              <button
-                onClick={() => setIsJoinModalOpen(true)}
-                className="px-6 py-3 bg-accent hover:bg-accent-hover text-white text-sm font-bold rounded-[14px] transition-colors shadow-soft cursor-pointer"
-              >
-                Express Interest
-              </button>
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn w-11 h-11"
+                  aria-label="View our GitHub Organization"
+                >
+                  <Github size={20} />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn w-11 h-11"
+                  aria-label="Connect with us on LinkedIn"
+                >
+                  <Linkedin size={20} />
+                </a>
+              </div>
             </div>
           </div>
         </AnimatedSection>

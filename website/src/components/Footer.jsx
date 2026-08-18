@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Github, Linkedin, Discord, Mail } from './SocialIcons';
 
 export function Footer() {
   const quickLinks = [
@@ -8,12 +9,6 @@ export function Footer() {
     { name: 'Community', path: '/community' }
   ];
 
-  const socialLinks = [
-    { name: 'GitHub', url: 'https://github.com' },
-    { name: 'Discord', url: 'https://discord.com' },
-    { name: 'LinkedIn', url: 'https://linkedin.com' }
-  ];
-
   return (
     <footer className="bg-surface-secondary/60 border-t border-border mt-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-8 py-16">
@@ -21,9 +16,7 @@ export function Footer() {
           {/* About */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-accent flex items-center justify-center text-white font-sans font-bold text-sm rounded-[10px]">
-                H
-              </span>
+              <img src="/fevicon.png" alt="HackIT Logo" className="w-8 h-8 object-contain rounded-[10px]" />
               <span className="font-sans font-bold text-text-primary text-base">HackIT</span>
             </div>
             <p className="text-sm text-text-secondary leading-relaxed max-w-sm">
@@ -51,34 +44,58 @@ export function Footer() {
           </div>
 
           {/* Connect */}
-          <div>
-            <h4 className="font-sans text-xs font-bold text-text-primary uppercase tracking-wider mb-4">
+          <div className="space-y-4">
+            <h4 className="font-sans text-xs font-bold text-text-primary uppercase tracking-wider">
               Connect
             </h4>
-            <ul className="space-y-3">
-              {socialLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-text-secondary hover:text-accent transition-colors font-semibold"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a
-                  href="mailto:contact@hackit-sggs.ac.in"
-                  className="text-sm text-text-secondary hover:text-accent transition-colors font-semibold"
-                >
-                  contact@hackit-sggs.ac.in
-                </a>
-              </li>
-            </ul>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                aria-label="HackIT GitHub Organization"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                aria-label="HackIT Discord Server"
+              >
+                <Discord size={18} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                aria-label="HackIT LinkedIn Page"
+              >
+                <Linkedin size={18} />
+              </a>
+              <a
+                href="mailto:contact@hackit-sggs.ac.in"
+                className="social-icon-btn"
+                aria-label="Email HackIT"
+              >
+                <Mail size={18} />
+              </a>
+            </div>
+            <div className="pt-1">
+              <a
+                href="mailto:contact@hackit-sggs.ac.in"
+                className="text-xs text-text-secondary hover:text-accent font-semibold transition-colors flex items-center gap-1.5"
+              >
+                <Mail size={12} />
+                <span>contact@hackit-sggs.ac.in</span>
+              </a>
+            </div>
           </div>
         </div>
+
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">

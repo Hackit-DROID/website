@@ -34,9 +34,7 @@ export function Navbar() {
           to="/" 
           className="flex items-center gap-3 group outline-none focus:outline-none"
         >
-          <span className="w-8.5 h-8.5 bg-accent flex items-center justify-center text-white font-sans font-bold text-sm rounded-[10px]">
-            H
-          </span>
+          <img src="/fevicon.png" alt="HackIT Logo" className="w-8.5 h-8.5 object-contain rounded-[10px]" />
           <div className="flex flex-col">
             <span className="font-sans font-bold tracking-tight text-text-primary text-sm leading-none mb-0.5">
               HackIT

@@ -1,18 +1,17 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import EventModal from './components/EventModal';
 import ScrollToTop from './components/ScrollToTop';
 import PageTransition from './components/PageTransition';
 
 import Home from './pages/Home';
 import Events from './pages/Events';
+import EventDetails from './pages/EventDetails';
 import Team from './pages/Team';
 import Community from './pages/Community';
 
-function AnimatedRoutes({ onOpenEvent }) {
+function AnimatedRoutes() {
   const location = useLocation();
 
   return (
@@ -22,7 +21,7 @@ function AnimatedRoutes({ onOpenEvent }) {
           path="/" 
           element={
             <PageTransition>
-              <Home onOpenEvent={onOpenEvent} />
+              <Home />
             </PageTransition>
           } 
         />
@@ -30,7 +29,15 @@ function AnimatedRoutes({ onOpenEvent }) {
           path="/events" 
           element={
             <PageTransition>
-              <Events onOpenEvent={onOpenEvent} />
+              <Events />
+            </PageTransition>
+          } 
+        />
+        <Route 
+          path="/events/:slug" 
+          element={
+            <PageTransition>
+              <EventDetails />
             </PageTransition>
           } 
         />
@@ -54,7 +61,7 @@ function AnimatedRoutes({ onOpenEvent }) {
           path="*" 
           element={
             <PageTransition>
-              <Home onOpenEvent={onOpenEvent} />
+              <Home />
             </PageTransition>
           } 
         />
@@ -64,11 +71,6 @@ function AnimatedRoutes({ onOpenEvent }) {
 }
 
 function App() {
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  const handleOpenEvent = (eventData) => setSelectedEvent(eventData);
-  const handleCloseEvent = () => setSelectedEvent(null);
-
   return (
     <Router>
       <ScrollToTop />
@@ -76,13 +78,10 @@ function App() {
         <Navbar />
 
         <main className="flex-grow">
-          <AnimatedRoutes onOpenEvent={handleOpenEvent} />
+          <AnimatedRoutes />
         </main>
 
         <Footer />
-
-        {/* Event Detail Modal */}
-        <EventModal event={selectedEvent} isOpen={!!selectedEvent} onClose={handleCloseEvent} />
       </div>
     </Router>
   );
