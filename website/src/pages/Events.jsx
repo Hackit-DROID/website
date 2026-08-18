@@ -1,178 +1,191 @@
-import { useState } from 'react';
-import { Calendar, MapPin, Award, Clock } from 'lucide-react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import Button from '../components/Button';
-import SectionEntrance from '../components/SectionEntrance';
-import CliFilterFlags from '../components/CliFilterFlags';
-import CliSearchBar from '../components/CliSearchBar';
-import { eventsData } from '../data/eventsData';
+import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
+import { milestonesData, whatsNextData } from '../data/eventsData';
 
 export function Events({ onOpenEvent }) {
-  const [selectedTab, setSelectedTab] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const shouldReduceMotion = useReducedMotion();
-
-  const filterOptions = [
-    { value: 'All', flag: '--all' },
-    { value: 'CTF', flag: '--type=ctf' },
-    { value: 'Workshops', flag: '--type=workshops' },
-    { value: 'Past', flag: '--archive' }
-  ];
-
-  const filteredEvents = eventsData.filter((evt) => {
-    if (selectedTab === 'CTF' && evt.type !== 'CTF') return false;
-    if (selectedTab === 'Workshops' && evt.type !== 'Workshops') return false;
-    if (selectedTab === 'Past' && evt.status !== 'Past') return false;
-    if (selectedTab !== 'Past' && evt.status === 'Past' && selectedTab !== 'All') return false;
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        evt.title.toLowerCase().includes(q) ||
-        evt.description.toLowerCase().includes(q) ||
-        evt.location.toLowerCase().includes(q) ||
-        evt.organizer.toLowerCase().includes(q)
-      );
-    }
-    return true;
-  });
-
-  const getFlagName = (tab) => {
-    const opt = filterOptions.find(o => o.value === tab);
-    return opt ? opt.flag : '--all';
-  };
+  const featuredEvents = milestonesData.filter((evt) => evt.featured);
+  const openHouseEvent = milestonesData.find((evt) => !evt.featured);
 
   return (
-    <SectionEntrance className="w-full bg-[#0a0a0a] text-[#ffffff] min-h-screen py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
-        {/* Page Header */}
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] text-xs font-mono text-[#4ade80]">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>HACKIT EVENT SCHEDULE & ARCHIVE</span>
-          </div>
-          <h1 className="display-lg text-[#ffffff]">
-            Events & Competitions
-          </h1>
-          <p className="text-base text-[#cccccc] leading-relaxed">
-            Join 24-hour Jeopardy CTFs, live kernel memory heap grooming sessions in Lab 402, and attack-defense watchparties during DEFCON Quals. All sessions are open to registered members and Discord community operators.
-          </p>
+    <main className="min-h-screen bg-background text-text-primary pt-24 pb-20 font-sans antialiased">
+      {/* Header */}
+      <AnimatedSection className="max-w-6xl mx-auto px-4 sm:px-8 pt-8 pb-14">
+        <span className="inline-block px-3.5 py-1 bg-accent-subtle text-accent text-xs font-bold tracking-wide rounded-full mb-4">
+          2025-26 Academic Year
+        </span>
+
+        <h1 className="font-sans text-3xl sm:text-5xl font-bold text-text-primary tracking-tight mb-4 uppercase">
+          Club Milestones
+        </h1>
+
+        <p className="text-base text-text-secondary max-w-2xl leading-relaxed mb-10">
+          HackIT is evolving into a student-driven cybersecurity community built on competition, learning, and hands-on technical experience.
+        </p>
+
+        {/* Value Pillars */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { num: '01', label: 'Competition', sub: 'CTFs & tournaments' },
+            { num: '02', label: 'Learning', sub: 'Weekly practical labs' },
+            { num: '03', label: 'Growth', sub: 'Technical excellence' },
+            { num: '04', label: 'Community', sub: 'Student-led network' },
+          ].map((p) => (
+            <div key={p.num} className="p-5 bg-surface border border-border rounded-[20px] shadow-soft">
+              <span className="text-accent text-sm font-bold block mb-1">{p.num}. {p.label}</span>
+              <span className="text-xs text-text-secondary font-medium leading-normal">{p.sub}</span>
+            </div>
+          ))}
         </div>
+      </AnimatedSection>
 
-        {/* Unified CLI Filter & Search Query Container */}
-        <div className="bg-[#121212] border border-[#2a2a2a] rounded-xl p-4 font-mono text-xs space-y-4">
-          
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            
-            {/* Reusable CLI Filter Flags */}
-            <CliFilterFlags 
-              options={filterOptions} 
-              activeValue={selectedTab} 
-              onChange={setSelectedTab} 
-              label="FILTER_FLAG:" 
-            />
+      {/* Spacing container background instead of line divider */}
+      <div className="bg-surface-secondary/40 border-y border-border/50">
+        {/* Major Milestones */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-8 py-20">
+          <AnimatedSection className="mb-12">
+            <span className="font-sans text-xs text-accent uppercase tracking-wider font-bold block mb-2">Portfolio</span>
+            <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-text-primary uppercase tracking-tight mb-2">
+              Major Milestones
+            </h2>
+            <p className="text-sm text-text-secondary">
+              Key events highlighting student participation, hackathons, and practical learning.
+            </p>
+          </AnimatedSection>
 
-            {/* Reusable CLI Search Bar */}
-            <CliSearchBar 
-              value={searchQuery} 
-              onChange={setSearchQuery} 
-              placeholder='grep -i "kernel"'
-              onClear={() => setSearchQuery('')}
-            />
-
-          </div>
-
-          {/* Active Query Output Status */}
-          <div className="pt-2 border-t border-[#2a2a2a]/60 text-[11px] text-[#5a5a5a] flex items-center justify-between">
-            <span>QUERY_PIPELINE: <strong className="text-[#cccccc]">hackit events list {getFlagName(selectedTab)} {searchQuery ? `--search="${searchQuery}"` : ''}</strong></span>
-            <span>MATCHES: <strong className="text-[#4ade80]">{filteredEvents.length}</strong></span>
-          </div>
-
-        </div>
-
-        {/* Filtered Content Grid with Fast (~180ms) Transition */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedTab + searchQuery}
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.18, ease: 'easeOut' }}
-          >
-            {filteredEvents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredEvents.map((event) => (
-                  <div
-                    key={event.id}
-                    className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-6 flex flex-col justify-between space-y-6 group"
-                  >
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-full bg-[#4ade80]/15 text-[#4ade80] border border-[#4ade80]/30 text-xs font-mono font-semibold">
-                          {event.type}
-                        </span>
-                        
-                        <span className="text-[11px] font-mono text-[#888888] bg-[#121212] px-2 py-0.5 rounded border border-[#2a2a2a]">
-                          {event.capacityInfo}
-                        </span>
-                      </div>
-
-                      <h3 className="text-xl font-bold text-[#ffffff] group-hover:text-[#4ade80] transition-colors leading-tight">
-                        {event.title}
-                      </h3>
-
-                      <div className="space-y-2 text-xs text-[#cccccc] font-mono bg-[#0a0a0a] p-3 rounded-lg border border-[#2a2a2a]">
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-3.5 h-3.5 text-[#4ade80]" />
-                          <span>{event.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 text-[#4ade80]" />
-                          <span>{event.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Award className="w-3.5 h-3.5 text-[#4ade80]" />
-                          <span>{event.prizes}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-xs text-[#cccccc] leading-relaxed line-clamp-3">
-                        {event.description}
-                      </p>
+          {/* Featured Event Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {featuredEvents.map((evt, index) => (
+              <AnimatedCard key={evt.id} index={index}>
+                <article className="bg-surface border border-border p-6 h-full flex flex-col justify-between card-hover group shadow-soft hover:shadow hover:border-border-hover rounded-[24px]">
+                  <div>
+                    {/* Header */}
+                    <div className="flex items-center justify-between gap-2 mb-5 text-xs">
+                      <span className="px-3.5 py-1 bg-accent-subtle text-accent font-bold rounded-full">
+                        {evt.category}
+                      </span>
+                      <span className="text-text-secondary font-semibold">{evt.date}</span>
                     </div>
 
-                    <div className="pt-4 border-t border-[#2a2a2a] flex flex-col space-y-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#888888]">
-                        <span>Host: {event.organizer}</span>
-                        <span className="text-[#4ade80] font-semibold">{event.difficulty}</span>
-                      </div>
-                      
-                      <Button
-                        variant={event.registrationOpen ? "primary" : "secondary"}
-                        size="sm"
-                        onClick={() => onOpenEvent(event)}
-                        className="w-full text-xs font-mono"
-                      >
-                        {event.ctaLabel}
-                      </Button>
+                    <h3 className="font-sans text-base font-bold text-text-primary group-hover:text-accent transition-colors mb-3">
+                      {evt.title}
+                    </h3>
+
+                    <p className="text-sm text-text-secondary leading-relaxed mb-5">
+                      {evt.summary}
+                    </p>
+
+                    {/* Highlights */}
+                    <div className="mb-5 space-y-2.5 p-5 bg-background border border-border rounded-[16px]">
+                      <span className="text-xs font-bold text-text-primary uppercase tracking-wider block mb-1">
+                        Key Highlights
+                      </span>
+                      <ul className="space-y-2 text-xs text-text-secondary">
+                        {evt.highlights.map((highlight, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span className="leading-relaxed">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="py-16 text-center bg-[#121212] border border-[#2a2a2a] rounded-xl space-y-3 font-mono">
-                <p className="text-base text-[#cccccc]">No matching events found for query pipeline.</p>
-                <Button variant="secondary" size="sm" onClick={() => { setSelectedTab('All'); setSearchQuery(''); }}>
-                  $ hackit events reset
-                </Button>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
 
+                  {/* Footer */}
+                  <div className="pt-4 border-t border-surface-secondary space-y-4 text-xs">
+                    <div className="flex items-center gap-1.5 text-text-secondary font-medium">
+                      <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+                      <span>{evt.venue}</span>
+                    </div>
+                    {evt.prizes && (
+                      <div className="flex items-center gap-1.5 text-accent font-bold">
+                        <span className="material-symbols-outlined text-sm">workspace_premium</span>
+                        <span>{evt.prizes}</span>
+                      </div>
+                    )}
+
+                    {onOpenEvent && (
+                      <button
+                        onClick={() => onOpenEvent(evt)}
+                        className="w-full mt-3 py-2.5 bg-surface-secondary hover:bg-accent hover:text-white text-xs font-bold transition-all border border-border hover:border-transparent rounded-[14px] shadow-sm cursor-pointer"
+                      >
+                        View Details
+                      </button>
+                    )}
+                  </div>
+                </article>
+              </AnimatedCard>
+            ))}
+          </div>
+
+          {/* Open House (subtle emphasis) */}
+          {openHouseEvent && (
+            <AnimatedSection>
+              <div className="bg-surface border border-border p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 text-sm shadow-soft rounded-[20px] hover:border-border-hover transition-colors">
+                <div className="flex items-center gap-4">
+                  <span className="w-2.5 h-2.5 bg-text-secondary rounded-full shrink-0"></span>
+                  <div>
+                    <div className="flex items-center gap-2 text-xs mb-1.5">
+                      <span className="px-2.5 py-0.5 bg-accent-subtle text-accent font-bold rounded-full">
+                        {openHouseEvent.category}
+                      </span>
+                      <span className="text-text-secondary font-semibold">{openHouseEvent.date}</span>
+                    </div>
+                    <h4 className="font-bold text-text-primary text-base leading-snug">{openHouseEvent.title}</h4>
+                    <p className="text-xs text-text-secondary mt-1 max-w-2xl leading-relaxed">{openHouseEvent.summary}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs text-text-secondary shrink-0 font-medium">
+                  <span>{openHouseEvent.venue}</span>
+                  {onOpenEvent && (
+                    <button
+                      onClick={() => onOpenEvent(openHouseEvent)}
+                      className="px-4.5 py-2.5 bg-surface-secondary text-text-primary hover:bg-border border border-border font-bold rounded-[14px] transition-colors cursor-pointer"
+                    >
+                      Details
+                    </button>
+                  )}
+                </div>
+              </div>
+            </AnimatedSection>
+          )}
+        </section>
       </div>
-    </SectionEntrance>
+
+      {/* What's Next */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-8 py-24">
+        <AnimatedSection className="mb-12">
+          <span className="inline-block px-3.5 py-1 bg-accent text-white text-xs font-bold rounded-full mb-3">
+            Roadmap 2026-27
+          </span>
+          <h2 className="font-sans text-2xl sm:text-3xl font-extrabold text-text-primary uppercase tracking-tight mb-2">
+            What&apos;s next?
+          </h2>
+          <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
+            HackIT is expanding its technical footprint with practical initiatives designed to build real cybersecurity skills at SGGSIE&T.
+          </p>
+        </AnimatedSection>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {whatsNextData.map((item, index) => (
+            <AnimatedCard key={item.title} index={index}>
+              <div className="bg-surface border border-border p-6 h-full flex items-start gap-4 card-hover group shadow-soft hover:border-border-hover rounded-[22px]">
+                <span className="material-symbols-outlined text-lg text-accent bg-accent-subtle p-3 rounded-full shrink-0">
+                  {item.icon}
+                </span>
+                <div className="space-y-1">
+                  <h3 className="font-sans text-sm font-bold text-text-primary group-hover:text-accent transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-text-secondary leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            </AnimatedCard>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
 

@@ -1,104 +1,102 @@
-export const eventsData = [
+export const milestonesData = [
   {
-    id: "event-1",
-    title: "HackIT Internal CTF 2026: Quantum Break",
-    type: "CTF",
-    date: "Aug 15, 2026 • 10:00 AM UTC",
-    location: "Main Cyber Lab & Discord",
-    status: "Upcoming",
-    featured: true,
-    tag: "CTF Competition",
-    description: "24-hour Jeopardy-style CTF challenge featuring Web, Pwn, Crypto, Forensics, and Reverse Engineering. Top teams qualify for the national inter-university finals.",
-    prizes: "$2,500 Prize Pool + Swag & Badges",
-    difficulty: "All Skill Levels",
-    organizer: "HackIT Core Red Team",
-    registrationOpen: true,
-    ctaLabel: "Register Team (--slots=18)",
-    capacityInfo: "18 Team Slots Left"
+    id: "milestone-1",
+    title: "HackIT × Swayambhu Quiz Competition",
+    category: "Quiz Competition",
+    date: "3 September 2025",
+    venue: "Auditorium, Admin Building, SGGSIE&T",
+    summary: "Interactive technical quiz creating cybersecurity awareness and introducing 1st & 2nd-year students to ethical hacking, AI/ML, and web security.",
+    highlights: [
+      "140 participants from 1st and 2nd-year batches",
+      "₹3,000 prize pool with winner certificates",
+      "E-certificates awarded to all 140 participants"
+    ],
+    prizes: "₹3,000 Prize Pool + Certificates",
+    featured: true
   },
   {
-    id: "event-2",
-    title: "Kernel Exploitation & Heap Grooming Bootcamp",
-    type: "Workshops",
-    date: "Aug 22, 2026 • 5:00 PM UTC",
-    location: "Auditorium B & Live Stream",
-    status: "Upcoming",
-    featured: false,
-    tag: "Hands-on Workshop",
-    description: "Deep dive into Linux kernel memory layout, use-after-free vulnerabilities, and crafting reliable kernel level exploits with GDB & GEF.",
-    prizes: "Certificate of Completion",
-    difficulty: "Advanced",
-    organizer: "Alex Rivera (Binary Exploit Lead)",
-    registrationOpen: true,
-    ctaLabel: "Claim Seat (--cap=30)",
-    capacityInfo: "Cap: 30 Seats"
+    id: "milestone-2",
+    title: "HackIT Open House Meet",
+    category: "Open House",
+    date: "11 September 2025",
+    venue: "A3 Complex, SGGSIE&T",
+    summary: "Orientation introducing first-year students to HackIT's coding, web dev, and cybersecurity tracks with project showcases and faculty interactions.",
+    highlights: [
+      "Orientation & project showcases for first-year students",
+      "Covered coding, web development, and cybersecurity",
+      "Attended by Director, Dean, and Faculty Coordinator"
+    ],
+    prizes: null,
+    featured: false
   },
   {
-    id: "event-3",
-    title: "Zero-Trust Architecture & Cloud Pentesting",
-    type: "Workshops",
-    date: "Sep 05, 2026 • 4:00 PM UTC",
-    location: "Online (Google Meet)",
-    status: "Upcoming",
-    featured: false,
-    tag: "Guest Speaker",
-    description: "Special guest session with Senior Cloud Security Architect from Google SecOps on IAM privilege escalation, Kubernetes cluster auditing, and Zero-Trust principles.",
-    prizes: "Q&A + Cloud Credits",
-    difficulty: "Intermediate",
-    organizer: "Elena Rostova (Cloud Sec Lead)",
-    registrationOpen: true,
-    ctaLabel: "RSVP Stream (--online)",
-    capacityInfo: "Virtual Stream"
+    id: "milestone-3",
+    title: "SIH 2025 Internal Round",
+    category: "Hackathon Selection",
+    date: "29 September 2025",
+    venue: "CSE Department & Ideal Lab, SGGSIE&T",
+    summary: "Internal screening hackathon for Smart India Hackathon 2025, evaluating student teams across software and hardware innovation tracks.",
+    highlights: [
+      "Dual software and hardware project evaluation tracks",
+      "Project presentations judged by technical faculty panel",
+      "Shortlisted teams advanced to national SIH 2025 finals"
+    ],
+    prizes: "Shortlisting for National SIH 2025",
+    featured: true
   },
   {
-    id: "event-4",
-    title: "DEFCON Quals 2026 Watchparty & Attack-Defense",
-    type: "CTF",
-    date: "Sep 18, 2026 • 12:00 PM UTC",
-    location: "HackIT Cyber HQ (Room 402)",
-    status: "Upcoming",
-    featured: true,
-    tag: "Team Event",
-    description: "Join HackIT's competitive team live in HQ as we compete in DEFCON Quals. Real-time network capture, payload crafting, and joint defense tactics.",
-    prizes: "Exclusive Team Merch",
-    difficulty: "Advanced",
-    organizer: "Marcus Vance (President)",
-    registrationOpen: true,
-    ctaLabel: "Join HQ Squad (--hq-rm-402)",
-    capacityInfo: "HQ Room 402"
-  },
-  {
-    id: "event-5",
-    title: "Web Security 101: SQLi, XSS & OAuth Flaws",
-    type: "Workshops",
-    date: "Jul 10, 2026 • 6:00 PM UTC",
-    location: "Lab 101",
-    status: "Past",
-    featured: false,
-    tag: "Beginner Workshop",
-    description: "Introductory session covering OWASP Top 10 vulnerabilities, web proxy interception using Burp Suite, and basic exploit payloads.",
-    prizes: "150+ Attended",
-    difficulty: "Beginner",
-    organizer: "Sarah Chen (Web Sec Lead)",
-    registrationOpen: false,
-    ctaLabel: "View Session Archive",
-    capacityInfo: "150+ Attended"
-  },
-  {
-    id: "event-6",
-    title: "PicoCTF Spring Sprint 2026",
-    type: "CTF",
-    date: "Jun 14, 2026 • 9:00 AM UTC",
-    location: "Online",
-    status: "Past",
-    featured: false,
-    tag: "National CTF",
-    description: "HackIT placed 1st overall among university teams globally, solving 100% of Pwn and Reverse Engineering tracks.",
-    prizes: "1st Place Global Winner",
-    difficulty: "All Skill Levels",
-    organizer: "HackIT CTF Squad",
-    registrationOpen: false,
-    ctaLabel: "Inspect Scoreboard",
-    capacityInfo: "1st Place Global"
+    id: "milestone-4",
+    title: "Code Clash 2.0",
+    category: "Coding Competition",
+    date: "27 February 2026",
+    venue: "Language Lab, IT Department, SGGSIE&T",
+    summary: "Four-round technical competition testing competitive programming, logical reasoning, and CS fundamentals through live coding and challenges.",
+    highlights: [
+      "75-80 student competitors across 4 intensive rounds",
+      "Multi-stage: Online Quiz, Coding, Output Guessing, Logo ID",
+      "₹7,000 cash prizes awarded to top 3 winners"
+    ],
+    prizes: "₹7,000 Prize Pool (1st: ₹3k, 2nd: ₹2k, 3rd: ₹2k)",
+    featured: true
   }
 ];
+
+export const whatsNextData = [
+  {
+    title: "Capture the Flag Challenges",
+    icon: "flag",
+    description: "Compete in Jeopardy and Attack-Defense CTFs to build hands-on exploitation, cryptography, and forensics skills."
+  },
+  {
+    title: "Web Security Workshops",
+    icon: "security",
+    description: "Master OWASP Top 10 vulnerabilities, API security, and web penetration testing with Burp Suite."
+  },
+  {
+    title: "Reverse Engineering Sessions",
+    icon: "code",
+    description: "Learn binary disassembly, malware analysis, and GDB/Ghidra workflows for low-level research."
+  },
+  {
+    title: "Linux & Networking Workshops",
+    icon: "terminal",
+    description: "Deep-dive into Linux sysadmin, networking protocols, and packet analysis with Wireshark."
+  },
+  {
+    title: "Open-Source Security Projects",
+    icon: "handshake",
+    description: "Build collaborative security tools, vulnerability scanners, and community open-source repositories."
+  },
+  {
+    title: "Hackathons",
+    icon: "bolt",
+    description: "Participate in rapid security sprints building privacy tech, encryption utilities, and defensive software."
+  },
+  {
+    title: "AI & Cybersecurity Sessions",
+    icon: "psychology",
+    description: "Explore adversarial machine learning, LLM prompt security, and AI-driven threat intelligence."
+  }
+];
+
+export const eventsData = [...milestonesData];

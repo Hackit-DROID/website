@@ -1,15 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Copy, Check, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const fullCommandOutput = `[✓] Club Status: ACTIVE & COMPETING
-[✓] Target: DEFCON Quals 2026
-[✓] Weekly Lab: Thursdays 18:00 UTC
-[!] Active CTF Podium Streak: 14 Consecutive Events`;
 
 export function TerminalMockup({ onOpenJoin }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('live');
   const [copied, setCopied] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [isTypingQuick, setIsTypingQuick] = useState(false);
@@ -17,138 +10,62 @@ export function TerminalMockup({ onOpenJoin }) {
   const checkReducedMotion = () =>
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const checkHasBooted = () => {
-    try {
-      return typeof window !== 'undefined' && sessionStorage.getItem('hackit_hero_booted') === 'true';
-    } catch {
-      return false;
-    }
-  };
-
   const isReducedMotion = checkReducedMotion();
-  const alreadyBooted = checkHasBooted();
-  const shouldSkipBoot = isReducedMotion || alreadyBooted;
 
-  const [commandTyped, setCommandTyped] = useState(shouldSkipBoot ? 'hackit status' : '');
-  const [typedOutput, setTypedOutput] = useState(shouldSkipBoot ? fullCommandOutput : '');
-  const [isTyping, setIsTyping] = useState(!shouldSkipBoot);
+  // Initial command history showcasing whoami by default for authentic storytelling
+  const [history, setHistory] = useState([
+    { type: 'command', text: 'whoami' },
+    { 
+      type: 'output', 
+      text: `hackit\nCybersecurity and technology community at SGGSIE&T.` 
+    }
+  ]);
+
   const [isExecuting, setIsExecuting] = useState(false);
-
-  const [history, setHistory] = useState(
-    shouldSkipBoot
-      ? [
-          { type: 'system', text: 'HackIT Cyber Security Collective OS v4.2 [x86_64-linux]' },
-          { type: 'system', text: 'Type "help" or click interactive CLI actions below.' }
-        ]
-      : []
-  );
-
-  const terminalEndRef = useRef(null);
+  const terminalContainerRef = useRef(null);
 
   const scrollToBottom = () => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (terminalContainerRef.current) {
+      terminalContainerRef.current.scrollTop = terminalContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [history, typedOutput, commandTyped, activeTab, isExecuting, inputVal]);
-
-  // Boot animation sequence (initial page load only, strictly under ~1.8s)
-  useEffect(() => {
-    if (shouldSkipBoot) return;
-
-    try {
-      sessionStorage.setItem('hackit_hero_booted', 'true');
-    } catch {}
-
-    const headerText = 'HackIT Cyber Security Collective OS v4.2 [x86_64-linux]';
-    const targetCmd = 'hackit status';
-    const outputLines = fullCommandOutput.split('\n');
-
-    let isMounted = true;
-    let headerIdx = 0;
-
-    // Step 1: Type system header line
-    const headerInterval = setInterval(() => {
-      if (!isMounted) return;
-      headerIdx += 3;
-      if (headerIdx >= headerText.length) {
-        clearInterval(headerInterval);
-        setHistory([
-          { type: 'system', text: headerText },
-          { type: 'system', text: 'Type "help" or click interactive CLI actions below.' }
-        ]);
-
-        // Step 2: Type command ($ hackit status) (~28ms/char)
-        let cmdIdx = 0;
-        const cmdInterval = setInterval(() => {
-          if (!isMounted) return;
-          if (cmdIdx <= targetCmd.length) {
-            setCommandTyped(targetCmd.slice(0, cmdIdx));
-            cmdIdx++;
-          } else {
-            clearInterval(cmdInterval);
-            setCommandTyped(targetCmd);
-
-            // Step 3: Status lines sequence (~110ms per line)
-            let lineIdx = 0;
-            const lineInterval = setInterval(() => {
-              if (!isMounted) return;
-              lineIdx++;
-              setTypedOutput(outputLines.slice(0, lineIdx).join('\n'));
-              if (lineIdx >= outputLines.length) {
-                clearInterval(lineInterval);
-                setIsTyping(false);
-              }
-            }, 110);
-          }
-        }, 28);
-      }
-    }, 15);
-
-    return () => {
-      isMounted = false;
-      clearInterval(headerInterval);
-    };
-  }, [shouldSkipBoot]);
+  }, [history, isExecuting, inputVal]);
 
   const executeCommandAction = (rawCmd) => {
-    const lower = rawCmd.toLowerCase();
+    const lower = rawCmd.toLowerCase().trim();
     let responseText = '';
 
     if (lower === 'help') {
       responseText = `Available Commands:
-  help      - Display command list
-  status    - View system.status() telemetry readout
-  tracks    - Jump to Research & Pods
-  events    - Navigate to CTF Calendar
-  join      - Trigger membership application flow
-  clear     - Clear terminal buffer`;
-    } else if (lower === 'status' || lower === 'hackit status') {
-      responseText = `[✓] Executing system.status()... Revealing live telemetry readout panel.`;
-      const el = document.getElementById('telemetry-dashboard');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    } else if (lower === 'tracks') {
-      responseText = `[✓] Executing tracks query... Scrolling to Research Pods.`;
-      const el = document.getElementById('research-pods');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    } else if (lower === 'events') {
-      responseText = `[✓] Executing events pipeline... Opening HackIT Events Calendar.`;
-      const el = document.getElementById('upcoming-events');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        navigate('/events');
+  whoami     - Community identity
+  mission    - Core philosophy
+  focus      - Key technical domains
+  milestones - Major achievements
+  join       - Recruitment & membership info
+  clear      - Reset terminal screen`;
+    } else if (lower === 'whoami') {
+      responseText = `hackit\nCybersecurity and technology community at SGGSIE&T.`;
+    } else if (lower === 'mission') {
+      responseText = `Learn through practice.\nBuild through collaboration.\nCompete through challenges.`;
+    } else if (lower === 'focus') {
+      responseText = `* Cybersecurity\n* CTFs\n* Open-source projects\n* Workshops\n* Hackathons`;
+    } else if (lower === 'milestones') {
+      responseText = `* HackIT × Swayambhu Quiz Competition\n* SIH 2025 Internal Round\n* Code Clash 2.0`;
+    } else if (lower === 'join') {
+      responseText = `Recruitment for the 2026-27 academic year is now open.`;
+      if (onOpenJoin) {
+        setTimeout(() => onOpenJoin(), 400);
       }
-    } else if (lower === 'join' || lower === 'hackit join') {
-      responseText = `[!] Executing membership challenge sequence... Opening modal.`;
-      if (onOpenJoin) onOpenJoin();
     } else if (lower === 'clear') {
       setHistory([]);
-      setCommandTyped('');
-      setTypedOutput('');
       setInputVal('');
       return;
+    } else if (lower === 'events') {
+      responseText = `Navigating to Milestones & Operations...`;
+      navigate('/events');
     } else {
       responseText = `command not found: ${rawCmd}. Type "help" for valid options.`;
     }
@@ -170,15 +87,13 @@ export function TerminalMockup({ onOpenJoin }) {
       executeCommandAction(rawCmd);
       setIsExecuting(false);
       setInputVal('');
-    }, 180);
+    }, 120);
   };
 
-  // QUICK RUN button clicks: type command into input line (~30ms/char) before executing
   const handleQuickRun = (cmd) => {
     if (isExecuting || isTypingQuick) return;
 
-    const prefersReducedMotion = checkReducedMotion();
-    if (prefersReducedMotion) {
+    if (isReducedMotion) {
       executeCommandAction(cmd);
       setInputVal('');
       return;
@@ -197,9 +112,9 @@ export function TerminalMockup({ onOpenJoin }) {
           executeCommandAction(cmd);
           setIsTypingQuick(false);
           setInputVal('');
-        }, 100);
+        }, 60);
       }
-    }, 30);
+    }, 20);
   };
 
   const handleKeyDown = (e) => {
@@ -209,159 +124,104 @@ export function TerminalMockup({ onOpenJoin }) {
   };
 
   const copyTerminalContent = () => {
-    let textToCopy = history.map(item => item.type === 'command' ? `$ ${item.text}` : item.text).join('\n');
-    if (commandTyped) {
-      textToCopy += `\n$ ${commandTyped}\n${typedOutput}`;
-    }
+    const textToCopy = history
+      .map((item) => (item.type === 'command' ? `$ ${item.text}` : item.text))
+      .join('\n');
     navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden font-mono text-xs text-[#ffffff] card-hover">
-      {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#121212] border-b border-[#2a2a2a] select-none">
+    <div className="w-full bg-[#121212] border border-[#262626] rounded-sm shadow-2xl font-mono text-xs text-white overflow-hidden">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#181818] border-b border-[#262626] select-none">
+        {/* Host identifier */}
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 rounded-full bg-[#ef4444]/90 inline-block"></div>
-          <div className="w-3 h-3 rounded-full bg-[#f59e0b]/90 inline-block"></div>
-          <div className="w-3 h-3 rounded-full bg-[#4ade80]/90 inline-block"></div>
-          <span className="ml-2 text-xs text-[#888888] font-mono hidden sm:inline-block">
-            root@hackit-hq:~#
+          <div className="flex space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block opacity-80"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block opacity-80"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block opacity-80"></span>
+          </div>
+          <span className="ml-2 text-xs text-[#00FF41] font-bold tracking-wide">
+            hackit@sggs
           </span>
         </div>
 
-        {/* Tabs */}
-        <div className="flex items-center bg-[#0a0a0a] p-1 rounded-md border border-[#2a2a2a]">
-          <button
-            onClick={() => setActiveTab('live')}
-            className={`px-2.5 py-1 text-[11px] rounded transition-colors ${
-              activeTab === 'live' ? 'bg-[#1a1a1a] text-[#4ade80] font-semibold' : 'text-[#888888] hover:text-[#ffffff]'
-            }`}
-          >
-            shell.sh
-          </button>
-          <button
-            onClick={() => setActiveTab('manifest')}
-            className={`px-2.5 py-1 text-[11px] rounded transition-colors ${
-              activeTab === 'manifest' ? 'bg-[#1a1a1a] text-[#4ade80] font-semibold' : 'text-[#888888] hover:text-[#ffffff]'
-            }`}
-          >
-            manifest.json
-          </button>
-        </div>
-
-        {/* Action icons */}
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={copyTerminalContent}
-            className="p-1.5 text-[#888888] hover:text-[#4ade80] hover:bg-[#242424] rounded transition-colors"
-            title="Copy terminal buffer"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#4ade80]" /> : <Copy className="w-3.5 h-3.5" />}
-          </button>
-        </div>
+        {/* Right action button */}
+        <button
+          onClick={copyTerminalContent}
+          className="text-[10px] px-2 py-0.5 border border-[#262626] text-[#00FF41] font-bold uppercase transition-colors hover:bg-[#00FF41] hover:text-[#003907] rounded-sm"
+        >
+          {copied ? 'COPIED' : 'COPY'}
+        </button>
       </div>
 
       {/* Terminal Viewport */}
-      <div className="p-5 bg-[#1a1a1a] min-h-[300px] max-h-[360px] overflow-y-auto space-y-3 font-mono">
-        {activeTab === 'live' && (
-          <>
-            {history.map((item, idx) => (
-              <div key={idx} className="space-y-1">
-                {item.type === 'system' && (
-                  <div className="text-[#5a5a5a] text-[11px]">// {item.text}</div>
-                )}
-                {item.type === 'command' && (
-                  <div className="flex items-center text-[#4ade80] gap-1.5 font-semibold">
-                    <span className="text-[#888888]">$</span>
-                    <span>{item.text}</span>
-                  </div>
-                )}
-                {item.type === 'output' && (
-                  <pre className="text-[#cccccc] bg-[#0a0a0a]/50 p-2.5 rounded border border-[#2a2a2a]/40 text-xs leading-relaxed whitespace-pre-wrap font-mono">
-                    {item.text}
-                  </pre>
-                )}
-              </div>
-            ))}
-
-            {/* Typewriter Initial Execution Line */}
-            {commandTyped && (
-              <div className="space-y-1">
-                <div className="flex items-center text-[#4ade80] gap-1.5 font-semibold">
-                  <span className="text-[#888888]">$</span>
-                  <span>{commandTyped}</span>
-                </div>
-                {typedOutput && (
-                  <pre className="text-[#cccccc] bg-[#0a0a0a]/50 p-2.5 rounded border border-[#2a2a2a]/40 text-xs leading-relaxed whitespace-pre-wrap font-mono">
-                    {typedOutput}
-                  </pre>
-                )}
+      <div
+        ref={terminalContainerRef}
+        className="p-4 sm:p-5 bg-[#0a0a0a] min-h-[250px] max-h-[300px] overflow-y-auto space-y-3 leading-relaxed"
+      >
+        {history.map((item, idx) => (
+          <div key={idx} className="space-y-1">
+            {item.type === 'command' && (
+              <div className="flex items-center text-[#00FF41] gap-2 font-bold font-mono">
+                <span className="text-[#84967e]">&gt;</span>
+                <span>{item.text}</span>
               </div>
             )}
-
-            {/* Execution indicator */}
-            {(isExecuting || isTypingQuick) && (
-              <div className="text-[#4ade80] text-xs font-mono animate-pulse">
-                [EX_PROCESS] Running binary payload...
+            {item.type === 'output' && (
+              <div className="text-[#e5e2e1] pl-3 border-l-2 border-[#262626] py-1 text-xs whitespace-pre-wrap font-mono leading-relaxed bg-[#121212]/50">
+                {item.text}
               </div>
             )}
+          </div>
+        ))}
 
-            {/* Interactive Prompt Line */}
-            <div className="flex items-center gap-2 text-[#4ade80] pt-1">
-              <ChevronRight className="w-4 h-4 text-[#4ade80] shrink-0" />
-              <input
-                type="text"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={isExecuting || isTypingQuick}
-                placeholder={isTyping || isExecuting || isTypingQuick ? "executing..." : "type 'help', 'status', 'join'..."}
-                className="w-full bg-transparent border-none outline-none text-xs font-mono text-[#ffffff] placeholder-[#5a5a5a] focus:ring-0 p-0"
-              />
-            </div>
-            <div ref={terminalEndRef} />
-          </>
+        {/* Execution Status */}
+        {(isExecuting || isTypingQuick) && (
+          <div className="text-[#00FF41] text-xs font-mono animate-pulse pt-1">
+            [QUERYING] ...
+          </div>
         )}
 
-        {activeTab === 'manifest' && (
-          <pre className="text-[#4ade80] text-xs leading-relaxed font-mono">
-{`{
-  "organization": "HackIT Cybersecurity",
-  "est": 2022,
-  "motto": "Break, Build, Secure.",
-  "active_members": 779,
-  "pods": [
-    "Red Team / Binary Exploitation",
-    "Web Security & Cloud Auditing",
-    "Reverse Engineering & Malware",
-    "Applied Cryptography",
-    "Blue Team Operations"
-  ],
-  "open_challenges": 14,
-  "discord": "https://discord.gg/hackit-cyber"
-}`}
-          </pre>
-        )}
+        {/* Interactive Prompt Line */}
+        <div className="flex items-center gap-2 text-[#00FF41] pt-2 border-t border-[#1a1a1a]">
+          <span className="text-[#00FF41] shrink-0 font-bold">&gt;</span>
+          <input
+            type="text"
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={isExecuting || isTypingQuick}
+            placeholder={
+              isExecuting || isTypingQuick
+                ? 'executing...'
+                : "type 'whoami', 'mission', 'focus', 'milestones', 'join'..."
+            }
+            className="w-full bg-transparent border-none outline-none font-mono text-xs text-white placeholder-[#525252] p-0 focus:ring-0"
+          />
+        </div>
       </div>
 
-      {/* Functional Quick Action Buttons Footer */}
-      <div className="px-4 py-2.5 bg-[#121212] border-t border-[#2a2a2a] flex items-center justify-between gap-2 overflow-x-auto text-[11px]">
-        <span className="text-[#5a5a5a] uppercase font-semibold text-[10px] shrink-0">QUICK EXEC:</span>
-        <div className="flex items-center gap-2">
+      {/* Quick Commands Footer */}
+      <div className="px-4 py-3 bg-[#141414] border-t border-[#262626] flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span className="text-[#84967e] uppercase font-bold text-[10px] shrink-0">
+          STORY COMMANDS:
+        </span>
+        <div className="flex flex-wrap items-center gap-1.5">
           {[
-            { label: 'status', cmd: 'status' },
-            { label: 'tracks', cmd: 'tracks' },
-            { label: 'events', cmd: 'events' },
+            { label: 'whoami', cmd: 'whoami' },
+            { label: 'mission', cmd: 'mission' },
+            { label: 'focus', cmd: 'focus' },
+            { label: 'milestones', cmd: 'milestones' },
             { label: 'join', cmd: 'join' }
           ].map((action) => (
             <button
               key={action.label}
               disabled={isExecuting || isTypingQuick}
               onClick={() => handleQuickRun(action.cmd)}
-              className="px-2.5 py-1 bg-[#1a1a1a] hover:bg-[#242424] text-[#4ade80] hover:text-[#ffffff] border border-[#2a2a2a] hover:border-[#4ade80] rounded transition-colors shrink-0 font-semibold disabled:opacity-50"
-              title={`Execute $ ${action.cmd}`}
+              className="px-2.5 py-1 bg-[#1a1a1a] hover:bg-[#00FF41] hover:text-[#003907] text-[#00FF41] border border-[#262626] hover:border-[#00FF41] font-mono text-[11px] font-semibold uppercase transition-all duration-150 disabled:opacity-50 rounded-sm"
             >
               $ {action.label}
             </button>

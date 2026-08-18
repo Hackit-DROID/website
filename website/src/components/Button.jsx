@@ -1,6 +1,6 @@
 export function Button({
   children,
-  variant = 'primary', // 'primary', 'secondary', 'text-link', 'icon-circular'
+  variant = 'primary',
   size = 'md',
   onClick,
   className = '',
@@ -8,29 +8,27 @@ export function Button({
   disabled = false,
   ...props
 }) {
-  const baseStyles = "inline-flex items-center justify-center font-semibold transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4ade80]/50 disabled:opacity-50 disabled:cursor-not-allowed select-none";
+  const baseStyles = "inline-flex items-center justify-center font-sans font-semibold transition-all duration-200 ease-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-[16px] shadow-sm";
 
   const variants = {
-    primary: "bg-[#4ade80] text-[#0a0a0a] hover:bg-[#22c55e] active:scale-[0.98] rounded-md",
-    secondary: "bg-[#1a1a1a] text-[#ffffff] border border-[#2a2a2a] hover:border-[#3a3a3a] hover:bg-[#242424] active:scale-[0.98] rounded-md",
-    "text-link": "bg-transparent text-[#ffffff] hover:text-[#4ade80] underline-offset-4 hover:underline p-0 font-medium",
-    "icon-circular": "bg-[#1a1a1a] text-[#ffffff] hover:text-[#4ade80] hover:bg-[#242424] border border-[#2a2a2a] rounded-full p-2.5"
+    primary: "bg-accent text-white hover:bg-accent-hover active:scale-[0.98] border border-transparent shadow-soft",
+    secondary: "bg-surface-secondary text-text-primary border border-border hover:border-border-hover hover:bg-surface active:scale-[0.98]",
+    outline: "border border-border text-text-primary hover:bg-surface-secondary hover:border-border-hover active:scale-[0.98]",
+    ghost: "bg-transparent text-text-secondary hover:text-text-primary hover:bg-surface-secondary",
   };
 
   const sizes = {
-    sm: "px-3 py-1.5 text-xs h-8",
-    md: "px-5 py-2.5 text-sm h-10",
-    lg: "px-7 py-3 text-base h-12"
+    sm: "px-4.5 py-2 text-xs",
+    md: "px-6 py-3 text-sm",
+    lg: "px-8 py-3.5 text-sm"
   };
-
-  const sizeStyle = variant === 'icon-circular' ? '' : sizes[size] || sizes.md;
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variants[variant] || variants.primary} ${sizeStyle} ${className}`}
+      className={`${baseStyles} ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`}
       {...props}
     >
       {children}

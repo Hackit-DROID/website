@@ -1,27 +1,65 @@
 import { useState } from 'react';
-import { BookOpen, Star, ExternalLink, FileCode } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import Button from '../components/Button';
-import SectionEntrance from '../components/SectionEntrance';
-import CliFilterFlags from '../components/CliFilterFlags';
-import CliSearchBar from '../components/CliSearchBar';
-import { resourcesData } from '../data/resourcesData';
+import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
 
 export function Resources({ onOpenWriteup }) {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [activeFilter, setActiveFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [copiedId, setCopiedId] = useState(null);
   const shouldReduceMotion = useReducedMotion();
 
-  const filterOptions = [
-    { value: 'All', flag: '--all' },
-    { value: 'Writeups', flag: '--type=writeups' },
-    { value: 'Cheatsheets', flag: '--type=cheatsheets' },
-    { value: 'Tools', flag: '--type=tools' }
+  const resourcesData = [
+    {
+      id: '#001',
+      tag: 'EXPLOIT',
+      title: 'Buffer Overflow in Custom ARM Kernels',
+      description: 'A deep dive into memory corruption vulnerabilities within ARM-based microkernels, focusing on return-oriented programming (ROP) techniques.',
+      author: '@root_access'
+    },
+    {
+      id: '#002',
+      tag: 'WRITEUP',
+      title: 'DEF CON 31 CTF: The Final Push',
+      description: 'Documentation of the reverse engineering challenges faced during the final stages of the international competition.',
+      author: '@nullbyte'
+    },
+    {
+      id: '#003',
+      tag: 'HARDWARE',
+      title: 'ESP32 Marauder Custom Build',
+      description: 'Schematics and firmware configuration for a portable Wi-Fi audit tool using the ESP32 chipset and custom OLED display.',
+      author: '@hardware_head'
+    },
+    {
+      id: '#004',
+      tag: 'WEB',
+      title: 'Advanced SQLi in Modern CMS',
+      description: 'Bypassing modern WAFs and prepared statements using obscure character encoding and time-based blind injection.',
+      author: '@injection_v2'
+    },
+    {
+      id: '#005',
+      tag: 'OSINT',
+      title: 'Automating Metadata Extraction',
+      description: 'A Python-based framework for bulk scanning image archives to extract geolocation and device-specific EXIF data.',
+      author: '@seeker'
+    },
+    {
+      id: '#006',
+      tag: 'TOOLS',
+      title: 'HACKIT Terminal Kit v2.4',
+      description: 'Internal shell configuration, zsh aliases, and automated recon scripts for rapid deployment during engagements.',
+      author: '@maintainer'
+    }
   ];
 
-  const filteredResources = resourcesData.filter((res) => {
-    if (selectedCategory !== 'All' && res.category !== selectedCategory) return false;
+  const filterOptions = ['ALL', 'WRITEUPS', 'TOOLS', 'HARDWARE', 'LINKS'];
+
+  const filteredResources = resourcesData.filter(res => {
+    if (activeFilter === 'WRITEUPS' && res.tag !== 'WRITEUP') return false;
+    if (activeFilter === 'TOOLS' && res.tag !== 'TOOLS') return false;
+    if (activeFilter === 'HARDWARE' && res.tag !== 'HARDWARE') return false;
+    if (activeFilter === 'LINKS' && res.tag !== 'EXPLOIT' && res.tag !== 'WEB' && res.tag !== 'OSINT') return false;
+
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
@@ -34,171 +72,118 @@ export function Resources({ onOpenWriteup }) {
     return true;
   });
 
-  const copySnippet = (id, code) => {
-    navigator.clipboard.writeText(code);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
-  const getFlagName = (cat) => {
-    const opt = filterOptions.find(o => o.value === cat);
-    return opt ? opt.flag : '--all';
-  };
-
   return (
-    <SectionEntrance className="w-full bg-[#0a0a0a] text-[#ffffff] min-h-screen py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
-        {/* Page Header */}
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] text-xs font-mono text-[#4ade80]">
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>HACKIT KNOWLEDGE BASE & CODE EXCERPTS</span>
-          </div>
-          <h1 className="display-lg text-[#ffffff]">
-            Writeups, Tools & Cheatsheets
+    <main className="min-h-screen grid-bg text-[#e5e2e1] pt-20">
+      {/* Hero Section */}
+      <AnimatedSection className="max-w-container-max mx-auto px-margin-desktop py-16 border-b border-[#e5e2e1]">
+        <div className="max-w-2xl">
+          <p className="font-label-caps text-label-caps text-[#72ff70] mb-4">/ARCHIVE/REPOSITORY</p>
+          <h1 className="font-display-xl font-extrabold mb-6 text-white uppercase">
+            CENTRAL KNOWLEDGE BASE
           </h1>
-          <p className="text-base text-[#cccccc] leading-relaxed">
-            Explore CTF solution walkthroughs, automated exploitation scripts, and hands-on cheatsheets written by HackIT members.
+          <p className="font-body-base text-body-base text-[#c6c6c7] max-w-lg">
+            Technical documentation, writeups, and exploitation guides curated by the HACKIT collective. Strictly for educational and research purposes.
           </p>
         </div>
+      </AnimatedSection>
 
-        {/* Unified CLI Filter & Search Query Container */}
-        <div className="bg-[#121212] border border-[#2a2a2a] rounded-xl p-4 font-mono text-xs space-y-4">
-          
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            
-            {/* Reusable CLI Filter Flags */}
-            <CliFilterFlags 
-              options={filterOptions} 
-              activeValue={selectedCategory} 
-              onChange={setSelectedCategory} 
-              label="FILTER_FLAG:" 
-            />
-
-            {/* Reusable CLI Search Bar */}
-            <CliSearchBar 
-              value={searchQuery} 
-              onChange={setSearchQuery} 
-              placeholder='grep -i "ghidra"'
-              onClear={() => setSearchQuery('')}
-            />
-
-          </div>
-
-          {/* Active Query Output Status */}
-          <div className="pt-2 border-t border-[#2a2a2a]/60 text-[11px] text-[#5a5a5a] flex items-center justify-between">
-            <span>QUERY_PIPELINE: <strong className="text-[#cccccc]">hackit docs list {getFlagName(selectedCategory)} {searchQuery ? `--search="${searchQuery}"` : ''}</strong></span>
-            <span>MATCHES: <strong className="text-[#4ade80]">{filteredResources.length}</strong></span>
-          </div>
-
+      {/* Filter / Utility Bar */}
+      <section className="max-w-container-max mx-auto px-margin-desktop py-4 flex flex-col md:flex-row justify-between items-center gap-4 bg-[#131313]/90 backdrop-blur-sm sticky top-[65px] z-30 border-b border-[#e5e2e1]">
+        <div className="flex gap-4 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+          {filterOptions.map((opt) => (
+            <button
+              key={opt}
+              onClick={() => setActiveFilter(opt)}
+              className={`font-label-caps text-label-caps px-3 py-1 border transition-colors duration-150 uppercase font-bold ${
+                activeFilter === opt
+                  ? 'border-[#72ff70] bg-[#72ff70] text-[#003907]'
+                  : 'border-[#e5e2e1] text-[#e5e2e1] hover:border-[#72ff70]'
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
         </div>
 
-        {/* Resource Cards List with Fast (~180ms) Transition */}
+        <div className="flex items-center gap-2 w-full md:w-64 border border-[#e5e2e1] px-3 py-1">
+          <span className="material-symbols-outlined text-[#c6c6c7]" style={{ fontSize: '18px' }}>
+            search
+          </span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="QUERY_RESOURCES..."
+            className="bg-transparent border-none focus:ring-0 font-code-sm text-code-sm text-[#e5e2e1] w-full placeholder:text-[#b9ccb2] outline-none"
+          />
+        </div>
+      </section>
+
+      {/* Resources Grid */}
+      <section className="max-w-container-max mx-auto px-margin-desktop py-12">
         <AnimatePresence mode="wait">
           <motion.div
-            key={selectedCategory + searchQuery}
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.18, ease: 'easeOut' }}
+            key={activeFilter + searchQuery}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.18, ease: 'easeOut' }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-[#e5e2e1]"
           >
-            {filteredResources.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredResources.map((res) => (
-                  <div
-                    key={res.id}
-                    className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-6 flex flex-col justify-between space-y-6 group"
-                  >
-                    <div className="space-y-4">
-                      
-                      <div className="flex items-center justify-between text-xs font-mono">
-                        <div className="flex items-center gap-2">
-                          <span className="px-2.5 py-0.5 rounded-full bg-[#4ade80]/15 text-[#4ade80] border border-[#4ade80]/30 font-semibold">
-                            {res.category}
-                          </span>
-                          <span className="text-[#888888]">• {res.tag}</span>
-                        </div>
-                        <span className="flex items-center gap-1 text-[#4ade80]">
-                          <Star className="w-3.5 h-3.5 fill-[#4ade80]" />
-                          {res.stars}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h3 
-                          onClick={() => onOpenWriteup(res)}
-                          className="text-xl font-bold text-[#ffffff] group-hover:text-[#4ade80] transition-colors cursor-pointer leading-tight"
-                        >
-                          {res.title}
-                        </h3>
-                        <p className="text-xs text-[#888888] font-mono mt-1">
-                          By {res.author} • {res.date} • {res.readTime}
-                        </p>
-                      </div>
-
-                      <p className="text-xs text-[#cccccc] leading-relaxed">
-                        {res.description}
-                      </p>
-
-                      {res.codeSnippet && (
-                        <div className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg p-3 font-mono text-[11px] relative overflow-hidden">
-                          <div className="flex items-center justify-between text-[#888888] mb-1.5 text-[10px] uppercase">
-                            <span className="flex items-center gap-1">
-                              <FileCode className="w-3 h-3 text-[#4ade80]" />
-                              Snippet Preview
-                            </span>
-                            <button
-                              onClick={() => copySnippet(res.id, res.codeSnippet)}
-                              className="hover:text-[#4ade80] transition-colors"
-                            >
-                              {copiedId === res.id ? "Copied!" : "Copy"}
-                            </button>
-                          </div>
-                          <pre className="text-[#4ade80] overflow-x-auto whitespace-pre leading-relaxed font-mono">
-                            <code>{res.codeSnippet}</code>
-                          </pre>
-                        </div>
-                      )}
-
+            {filteredResources.map((item, index) => (
+              <AnimatedCard key={item.id} index={index}>
+                <article
+                  onClick={() => onOpenWriteup ? onOpenWriteup(item) : null}
+                  className="border-r border-b border-[#e5e2e1] p-6 card-subtle-hover bg-[#131313] cursor-pointer flex flex-col justify-between min-h-[320px] group"
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="font-label-caps text-label-caps text-[#b9ccb2]">{item.id}</span>
+                      <span className="font-label-caps text-label-caps border border-[#b9ccb2] px-2 py-0.5 text-xs text-white">
+                        {item.tag}
+                      </span>
                     </div>
-
-                    <div className="pt-4 border-t border-[#2a2a2a] flex items-center justify-between">
-                      <a
-                        href={res.externalLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-[#888888] hover:text-[#ffffff] flex items-center gap-1 font-mono transition-colors"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5 text-[#4ade80]" />
-                        GitHub Repo
-                      </a>
-
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => onOpenWriteup(res)}
-                        className="text-xs font-mono"
-                      >
-                        Read Full Article
-                      </Button>
-                    </div>
+                    <h3 className="font-headline-md text-headline-md mb-3 group-hover:text-[#72ff70] transition-colors duration-150 font-bold text-white">
+                      {item.title}
+                    </h3>
+                    <p className="font-body-base text-body-base text-[#c6c6c7] mb-6 line-clamp-3">
+                      {item.description}
+                    </p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="py-16 text-center bg-[#121212] border border-[#2a2a2a] rounded-xl space-y-3 font-mono">
-                <p className="text-base text-[#cccccc]">No resources found matching query pipeline.</p>
-                <Button variant="secondary" size="sm" onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}>
-                  $ hackit docs reset
-                </Button>
-              </div>
-            )}
+                  <div className="flex justify-between items-center pt-4 border-t border-[#e5e2e1]/20">
+                    <span className="font-label-caps text-label-caps text-[#b9ccb2] uppercase">
+                      By {item.author}
+                    </span>
+                    <span className="material-symbols-outlined text-[#72ff70]">
+                      arrow_forward
+                    </span>
+                  </div>
+                </article>
+              </AnimatedCard>
+            ))}
           </motion.div>
         </AnimatePresence>
+      </section>
 
-      </div>
-    </SectionEntrance>
+      {/* Technical Specs / Footer Callout */}
+      <AnimatedSection className="max-w-container-max mx-auto px-margin-desktop py-12 mb-20">
+        <div className="bg-[#1A1A1A] border border-[#e5e2e1] p-4">
+          <div className="flex items-center justify-between border-b border-[#e5e2e1] pb-2 mb-4">
+            <span className="font-code-sm text-code-sm text-white font-bold">system_status.log</span>
+            <div className="flex gap-2">
+              <div className="w-3 h-3 bg-[#b9ccb2]"></div>
+              <div className="w-3 h-3 bg-[#b9ccb2]"></div>
+            </div>
+          </div>
+          <div className="font-code-sm text-code-sm space-y-1">
+            <p className="text-[#72ff70]">[INFO] Repository successfully synced with local mirrors.</p>
+            <p className="text-white">[INFO] Total Resources: 42 modules available.</p>
+            <p className="text-white">[INFO] Last update: 2026-07-24 04:12:00 UTC</p>
+            <p className="text-[#b9ccb2]">&gt; Want to contribute a writeup? Contact @moderator in the Discord.</p>
+          </div>
+        </div>
+      </AnimatedSection>
+    </main>
   );
 }
 

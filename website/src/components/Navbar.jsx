@@ -1,131 +1,110 @@
 import { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Terminal, Menu, X, ChevronRight, Activity } from 'lucide-react';
-import Button from './Button';
+import { useTheme } from '../context/ThemeContext';
 
-export function Navbar({ onOpenJoin }) {
+export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Events', path: '/events' },
     { name: 'Team', path: '/team' },
-    { name: 'Resources', path: '/resources' }
+    { name: 'Community', path: '/community' }
   ];
 
+  const ThemeToggleButton = () => (
+    <button
+      onClick={toggleTheme}
+      className="p-2.5 text-text-secondary hover:text-text-primary hover:bg-surface-secondary border border-border hover:border-border-hover transition-colors flex items-center justify-center rounded-[12px]"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    >
+      <span className="material-symbols-outlined text-base">
+        {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+      </span>
+    </button>
+  );
+
   return (
-    <header className="sticky top-0 z-40 w-full h-[64px] bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#2a2a2a] transition-all">
-      <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        
-        {/* Brand Logo & Wordmark */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] group-hover:border-[#4ade80] flex items-center justify-center text-[#4ade80] transition-all duration-300 shadow-[0_0_10px_rgba(74,222,128,0.1)] group-hover:shadow-[0_0_15px_rgba(74,222,128,0.3)]">
-            <Terminal className="w-5 h-5 transition-transform group-hover:scale-110" />
-          </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border py-1">
+      <div className="flex justify-between items-center w-full px-4 sm:px-8 py-3 max-w-6xl mx-auto">
+        {/* Brand */}
+        <Link 
+          to="/" 
+          className="flex items-center gap-3 group outline-none focus:outline-none"
+        >
+          <span className="w-8.5 h-8.5 bg-accent flex items-center justify-center text-white font-sans font-bold text-sm rounded-[10px]">
+            H
+          </span>
           <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-tight text-[#ffffff] group-hover:text-[#4ade80] transition-colors flex items-center gap-1">
-              HACK<span className="text-[#4ade80]">IT</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse"></span>
+            <span className="font-sans font-bold tracking-tight text-text-primary text-sm leading-none mb-0.5">
+              HackIT
             </span>
-            <span className="text-[10px] font-mono text-[#888888] tracking-widest uppercase hidden sm:inline-block">
-              CYBERSECURITY CLUB
+            <span className="text-[10px] text-text-secondary font-semibold uppercase tracking-wider">
+              SGGSIE&T
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#121212] px-3 py-1.5 rounded-full border border-[#2a2a2a]">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.path;
-            return (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ${
-                  isActive
-                    ? 'bg-[#1a1a1a] text-[#4ade80] shadow-sm font-semibold'
-                    : 'text-[#cccccc] hover:text-[#ffffff] hover:bg-[#1a1a1a]/50'
-                }`}
-              >
-                {link.name}
-              </NavLink>
-            );
-          })}
-        </nav>
-
-        {/* Right CTA Cluster */}
-        <div className="hidden md:flex items-center gap-4">
-          <div className="flex items-center gap-2 text-xs font-mono text-[#888888] px-3 py-1 bg-[#121212] rounded-md border border-[#2a2a2a]">
-            <Activity className="w-3.5 h-3.5 text-[#4ade80] animate-pulse" />
-            <span className="text-[#4ade80]">ONLINE</span>
+        {/* Desktop Links + Theme Toggle */}
+        <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-1.5 mr-1">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <NavLink
+                  key={link.name}
+                  to={link.path}
+                  className={
+                    isActive
+                      ? "px-4.5 py-2 text-accent bg-accent-subtle font-sans text-sm font-semibold rounded-[12px] transition-all duration-200"
+                      : "px-4.5 py-2 text-text-secondary hover:text-text-primary hover:bg-surface-secondary font-sans text-sm font-semibold rounded-[12px] transition-all duration-200"
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              );
+            })}
           </div>
-
-          <button
-            onClick={onOpenJoin}
-            className="text-sm font-medium text-[#cccccc] hover:text-[#4ade80] transition-colors px-2 py-1"
-          >
-            Sign in
-          </button>
-
-          <Button variant="primary" size="sm" onClick={onOpenJoin} className="gap-1.5">
-            <span>Join Us</span>
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+          <ThemeToggleButton />
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
-          <Button variant="primary" size="sm" onClick={onOpenJoin} className="text-xs py-1 px-3">
-            Join Us
-          </Button>
+        {/* Mobile Menu & Theme Toggle */}
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggleButton />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-[#cccccc] hover:text-[#ffffff] bg-[#1a1a1a] border border-[#2a2a2a] rounded-md"
+            className="text-text-secondary hover:text-text-primary font-sans text-sm font-semibold border border-border bg-surface-secondary hover:bg-surface px-4 py-2 rounded-[12px] transition-colors duration-200"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? 'Close' : 'Menu'}
           </button>
         </div>
       </div>
 
-      {/* Mobile Slide-down Drawer */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0a0a0a] border-b border-[#2a2a2a] px-4 py-6 space-y-4 animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `px-4 py-2.5 text-base font-medium rounded-lg transition-colors flex items-center justify-between ${
-                    isActive
-                      ? 'bg-[#1a1a1a] text-[#4ade80] font-semibold border border-[#2a2a2a]'
-                      : 'text-[#cccccc] hover:bg-[#121212]'
-                  }`
-                }
-              >
-                <span>{link.name}</span>
-                <ChevronRight className="w-4 h-4 text-[#5a5a5a]" />
-              </NavLink>
-            ))}
-          </div>
-
-          <div className="pt-4 border-t border-[#2a2a2a] flex flex-col gap-3">
-            <Button variant="primary" onClick={() => { setMobileMenuOpen(false); onOpenJoin(); }} className="w-full justify-center">
-              Apply to Join HackIT
-            </Button>
-            <button
-              onClick={() => { setMobileMenuOpen(false); onOpenJoin(); }}
-              className="text-center text-sm font-medium text-[#888888] hover:text-[#ffffff] py-2"
+        <div className="md:hidden bg-surface border-b border-border px-4 py-4 space-y-1.5 rounded-b-[20px]">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `block px-4 py-2.5 text-sm font-sans font-semibold transition-colors duration-200 rounded-[12px] ${
+                  isActive
+                    ? 'text-accent bg-accent-subtle'
+                    : 'text-text-secondary hover:bg-surface-secondary hover:text-text-primary'
+                }`
+              }
             >
-              Member Sign In
-            </button>
-          </div>
+              {link.name}
+            </NavLink>
+          ))}
         </div>
       )}
-    </header>
+    </nav>
   );
 }
 

@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { X, Calendar, MapPin, Award, Check, UserCheck } from 'lucide-react';
 import Button from './Button';
 
 export function EventModal({ event, isOpen, onClose }) {
   const [registered, setRegistered] = useState(false);
   const [email, setEmail] = useState('');
-  const [ticketType, setTicketType] = useState('In-Person Seat');
   const [ticketId, setTicketId] = useState('');
 
   useEffect(() => {
@@ -31,131 +29,115 @@ export function EventModal({ event, isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0a0a]/80 backdrop-blur-md transition-all duration-300">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md"
+      onClick={onClose}
+    >
       <div 
-        className="relative w-full max-w-xl bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden text-[#ffffff]"
+        className="relative w-full max-w-xl bg-surface border border-border overflow-hidden text-text-primary shadow-2xl rounded-[28px] max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top Band */}
-        <div className="flex items-center justify-between px-6 py-4 bg-[#121212] border-b border-[#2a2a2a]">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#4ade80]/15 text-[#4ade80] border border-[#4ade80]/30 text-xs font-mono font-semibold uppercase tracking-wider">
-              {event.type}
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 bg-surface-secondary border-b border-border rounded-t-[28px]">
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">
+              {event.category || 'Event'}
             </span>
-            <span className="text-xs text-[#888888] font-mono">• {event.difficulty}</span>
+            <span className="text-xs font-semibold text-text-secondary">{event.date || 'Upcoming'}</span>
           </div>
           <button 
             onClick={onClose}
-            className="text-[#888888] hover:text-[#ffffff] transition-colors p-1 rounded-md hover:bg-[#242424]"
+            className="text-text-secondary hover:text-text-primary text-sm p-1 hover:bg-surface rounded-full transition-colors w-7 h-7 flex items-center justify-center"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            ✕
           </button>
         </div>
 
-        <div className="p-6 max-h-[85vh] overflow-y-auto">
+        <div className="p-6 overflow-y-auto">
           {!registered ? (
             <>
-              <h2 className="text-2xl font-bold text-[#ffffff] leading-tight mb-3">
+              <h2 className="text-xl font-bold text-text-primary mb-4 leading-snug">
                 {event.title}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-xs mb-5">
-                <div className="flex items-center gap-2 text-[#cccccc]">
-                  <Calendar className="w-4 h-4 text-[#4ade80]" />
-                  <span>{event.date}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-background border border-border text-sm mb-6 rounded-[20px]">
+                <div>
+                  <span className="text-xs text-text-secondary uppercase font-bold block mb-1">Location</span>
+                  <span className="text-text-primary font-medium">{event.venue || event.location}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[#cccccc]">
-                  <MapPin className="w-4 h-4 text-[#4ade80]" />
-                  <span>{event.location}</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#cccccc]">
-                  <Award className="w-4 h-4 text-[#4ade80]" />
-                  <span>{event.prizes}</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#cccccc]">
-                  <UserCheck className="w-4 h-4 text-[#4ade80]" />
-                  <span>Host: {event.organizer}</span>
+                <div>
+                  <span className="text-xs text-text-secondary uppercase font-bold block mb-1">Date &amp; Time</span>
+                  <span className="text-text-primary font-medium">{event.time || event.date}</span>
                 </div>
               </div>
 
-              <div className="mb-6">
-                <h4 className="text-xs font-semibold text-[#e6e6e6] uppercase tracking-wider mb-2">
-                  Event Overview
-                </h4>
-                <p className="text-sm text-[#cccccc] leading-relaxed">
-                  {event.description}
-                </p>
-              </div>
-
-              {event.registrationOpen ? (
-                <form onSubmit={handleRegister} className="space-y-4 pt-2 border-t border-[#2a2a2a]">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#e6e6e6] uppercase tracking-wider mb-1.5">
-                      Confirm Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="hacker@domain.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#121212] border border-[#2a2a2a] focus:border-[#4ade80] rounded-md px-3.5 py-2.5 text-sm text-[#ffffff] placeholder-[#5a5a5a] focus:outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-[#e6e6e6] uppercase tracking-wider mb-1.5">
-                      Ticket Mode
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {['In-Person Seat', 'Virtual Discord Stream'].map((mode) => (
-                        <button
-                          key={mode}
-                          type="button"
-                          onClick={() => setTicketType(mode)}
-                          className={`py-2 px-3 text-xs rounded-md border font-medium transition-all text-center ${
-                            ticketType === mode
-                              ? 'bg-[#4ade80]/15 border-[#4ade80] text-[#4ade80]'
-                              : 'bg-[#121212] border-[#2a2a2a] text-[#888888] hover:border-[#3a3a3a] hover:text-[#ffffff]'
-                          }`}
-                        >
-                          {mode}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-end gap-3 pt-2">
-                    <Button variant="secondary" onClick={onClose}>
-                      Close
-                    </Button>
-                    <Button variant="primary" type="submit">
-                      Confirm Registration
-                    </Button>
-                  </div>
-                </form>
-              ) : (
-                <div className="p-4 bg-[#121212] border border-[#2a2a2a] rounded-lg text-center text-sm text-[#888888]">
-                  Registration is currently closed for this event. Check out upcoming workshops!
+              {event.description && (
+                <div className="mb-6">
+                  <h4 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2.5">
+                    Overview
+                  </h4>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    {event.description || event.summary}
+                  </p>
                 </div>
               )}
+
+              {event.highlights && (
+                <div className="mb-6">
+                  <h4 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2.5">
+                    Highlights
+                  </h4>
+                  <ul className="space-y-2 text-sm text-text-secondary">
+                    {event.highlights.map((h, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <span className="text-accent mt-0.5 text-base leading-none">•</span>
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <form onSubmit={handleRegister} className="space-y-4 pt-5 border-t border-border">
+                <div>
+                  <label className="block text-xs font-bold text-text-secondary uppercase tracking-wider mb-2 pl-1">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="student@sggs.ac.in"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-background border border-border focus:border-accent px-4 py-3 text-sm text-text-primary outline-none rounded-[14px] transition-all duration-200 focus:ring-2 focus:ring-accent/15"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-5 border-t border-border">
+                  <Button variant="secondary" onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button variant="primary" type="submit">
+                    Register
+                  </Button>
+                </div>
+              </form>
             </>
           ) : (
-            <div className="py-6 text-center space-y-4">
-              <div className="w-16 h-16 bg-[#4ade80]/10 border border-[#4ade80] rounded-full flex items-center justify-center mx-auto text-[#4ade80]">
-                <Check className="w-8 h-8" />
+            <div className="py-8 text-center space-y-4">
+              <div className="w-12 h-12 bg-success text-white flex items-center justify-center mx-auto text-xl font-bold rounded-full">
+                ✓
               </div>
-              <h3 className="text-2xl font-bold text-[#ffffff]">Registration Confirmed!</h3>
-              <p className="text-sm text-[#cccccc]">
-                We've reserved your slot for <strong className="text-[#ffffff]">{event.title}</strong>. A calendar invite and venue access key have been dispatched to <span className="text-[#4ade80] font-mono">{email}</span>.
+              <h3 className="text-lg font-bold text-text-primary">Registration Confirmed</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Registered for <strong className="text-text-primary">{event.title}</strong>. Confirmation sent to <span className="text-accent font-semibold">{email}</span>.
               </p>
-              <div className="p-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-md font-mono text-xs text-[#888888] text-left space-y-1">
-                <p>TICKET_ID: {ticketId}</p>
-                <p>MODE: {ticketType}</p>
-                <p>STATUS: CONFIRMED</p>
+              <div className="p-4 bg-background border border-border text-left text-xs text-text-secondary space-y-1.5 rounded-[16px] font-mono">
+                <p>Ticket: {ticketId}</p>
+                <p>Status: Confirmed</p>
               </div>
-              <Button variant="primary" onClick={() => { setRegistered(false); onClose(); }} className="w-full">
+              <Button variant="primary" onClick={() => { setRegistered(false); onClose(); }} className="w-full mt-4">
                 Done
               </Button>
             </div>

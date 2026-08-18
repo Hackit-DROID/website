@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { X, Copy, Check, ExternalLink, FileCode, Star, BookOpen } from 'lucide-react';
 import Button from './Button';
 
 export function WriteupModal({ resource, isOpen, onClose }) {
@@ -22,101 +21,76 @@ export function WriteupModal({ resource, isOpen, onClose }) {
   if (!isOpen || !resource) return null;
 
   const copyCode = () => {
-    navigator.clipboard.writeText(resource.codeSnippet || resource.fullWriteup);
+    navigator.clipboard.writeText(resource.codeSnippet || resource.fullWriteup || '');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0a0a]/80 backdrop-blur-md transition-all duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0a0a]/90 backdrop-blur-sm transition-all duration-300">
       <div 
-        className="relative w-full max-w-3xl bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden text-[#ffffff]"
+        className="relative w-full max-w-3xl bg-[#131313] border border-[#e5e2e1] overflow-hidden text-[#e5e2e1]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 bg-[#121212] border-b border-[#2a2a2a]">
-          <div className="flex items-center gap-2 font-mono text-xs text-[#888888]">
-            <BookOpen className="w-4 h-4 text-[#4ade80]" />
-            <span className="text-[#4ade80]">{resource.category}</span>
-            <span>/</span>
-            <span>{resource.tag}</span>
+        <div className="flex items-center justify-between px-6 py-4 bg-[#1a1a1a] border-b border-[#e5e2e1]">
+          <div className="flex items-center gap-2 font-code-sm text-xs text-[#00FF41] font-bold uppercase">
+            <span>{resource.tag || 'DOCUMENT'}</span>
+            <span className="text-[#e5e2e1]">/</span>
+            <span className="text-white">{resource.id || '#000'}</span>
           </div>
           <button 
             onClick={onClose}
-            className="text-[#888888] hover:text-[#ffffff] transition-colors p-1 rounded-md hover:bg-[#242424]"
+            className="font-code-sm text-xs text-[#e5e2e1] hover:text-[#00FF41] transition-colors px-2 py-1 border border-[#e5e2e1] hover:border-[#00FF41]"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            [ESC]
           </button>
         </div>
 
         {/* Content */}
         <div className="p-6 max-h-[80vh] overflow-y-auto space-y-6">
           <div>
-            <div className="flex items-center gap-3 text-xs text-[#888888] mb-2 font-mono">
+            <div className="flex items-center gap-3 text-xs text-[#b9ccb2] mb-2 font-code-sm uppercase">
               <span>By {resource.author}</span>
               <span>•</span>
-              <span>{resource.date}</span>
-              <span>•</span>
-              <span>{resource.readTime}</span>
-              <span className="flex items-center gap-1 text-[#4ade80] ml-auto">
-                <Star className="w-3.5 h-3.5 fill-[#4ade80]" />
-                {resource.stars}
-              </span>
+              <span>{resource.date || '2024'}</span>
             </div>
-            <h2 className="text-2xl font-bold text-[#ffffff] leading-tight">
+            <h2 className="font-display-lg text-headline-md text-white font-extrabold uppercase leading-tight">
               {resource.title}
             </h2>
-            <p className="text-sm text-[#cccccc] mt-2 leading-relaxed">
+            <p className="font-body-base text-sm text-[#c6c6c7] mt-3 leading-relaxed">
               {resource.description}
             </p>
           </div>
 
           {/* Code snippet block */}
-          {resource.codeSnippet && (
-            <div className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg overflow-hidden font-mono text-xs">
-              <div className="flex items-center justify-between px-4 py-2 bg-[#121212] border-b border-[#2a2a2a] text-[#888888]">
-                <span className="flex items-center gap-2">
-                  <FileCode className="w-4 h-4 text-[#4ade80]" />
-                  Payload / Code Excerpt
-                </span>
+          {(resource.codeSnippet || resource.fullWriteup) && (
+            <div className="bg-[#0e0e0e] border border-[#e5e2e1] overflow-hidden font-code-sm text-xs">
+              <div className="flex items-center justify-between px-4 py-2 bg-[#1a1a1a] border-b border-[#e5e2e1] text-[#b9ccb2] font-label-caps uppercase font-bold">
+                <span>Payload / Code Excerpt</span>
                 <button
                   onClick={copyCode}
-                  className="flex items-center gap-1 text-[11px] px-2 py-1 bg-[#1a1a1a] hover:bg-[#242424] text-[#ffffff] border border-[#2a2a2a] rounded transition-colors"
+                  className="px-3 py-1 bg-white text-[#0a0a0a] hover:bg-[#00FF41] font-label-caps text-[11px] font-bold uppercase transition-colors"
                 >
-                  {copied ? <Check className="w-3 h-3 text-[#4ade80]" /> : <Copy className="w-3 h-3" />}
-                  {copied ? "Copied!" : "Copy Code"}
+                  {copied ? "COPIED" : "COPY CODE"}
                 </button>
               </div>
-              <pre className="p-4 text-[#4ade80] overflow-x-auto whitespace-pre leading-relaxed">
-                <code>{resource.codeSnippet}</code>
+              <pre className="p-4 text-[#00FF41] overflow-x-auto whitespace-pre leading-relaxed font-mono">
+                <code>{resource.codeSnippet || resource.fullWriteup}</code>
               </pre>
             </div>
           )}
 
-          {/* Full Writeup markdown simulation */}
-          <div className="prose prose-invert max-w-none text-sm text-[#cccccc] space-y-3 border-t border-[#2a2a2a] pt-4 font-mono">
-            {resource.fullWriteup.split('\n\n').map((paragraph, idx) => {
-              if (paragraph.startsWith('### ')) {
-                return <h3 key={idx} className="text-lg font-bold text-[#ffffff] pt-2">{paragraph.replace('### ', '')}</h3>;
-              }
-              if (paragraph.startsWith('#### ')) {
-                return <h4 key={idx} className="text-base font-semibold text-[#4ade80] pt-1">{paragraph.replace('#### ', '')}</h4>;
-              }
-              return <p key={idx} className="leading-relaxed">{paragraph}</p>;
-            })}
-          </div>
-
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-[#2a2a2a]">
+          <div className="flex items-center justify-between pt-4 border-t border-[#e5e2e1]">
             <a
-              href={resource.externalLink}
+              href={resource.externalLink || "https://github.com"}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs text-[#4ade80] hover:underline font-mono"
+              className="font-label-caps text-xs text-[#00FF41] hover:underline uppercase font-bold"
             >
-              <ExternalLink className="w-4 h-4" />
-              View full repository on GitHub
+              &gt; View Repository on GitHub
             </a>
             <Button variant="primary" onClick={onClose} size="sm">
               Close Viewer

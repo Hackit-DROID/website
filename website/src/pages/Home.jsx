@@ -1,391 +1,220 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Code, Cpu, Lock, Shield, ArrowRight, ChevronRight, Activity, Terminal } from 'lucide-react';
-import Button from '../components/Button';
-import StatCounter from '../components/StatCounter';
-import TerminalMockup from '../components/TerminalMockup';
-import SectionEntrance from '../components/SectionEntrance';
-import { eventsData } from '../data/eventsData';
+import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
+import JoinModal from '../components/JoinModal';
+import { milestonesData } from '../data/eventsData';
 
-export function Home({ onOpenJoin, onOpenEvent }) {
-  const upcomingEvents = eventsData.filter(e => e.status === 'Upcoming').slice(0, 3);
+export function Home() {
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+
+  const focusAreas = [
+    {
+      title: 'Cybersecurity',
+      icon: 'security',
+      description: 'Practical learning in web security, ethical hacking fundamentals, and defensive configurations.'
+    },
+    {
+      title: 'Competition',
+      icon: 'flag',
+      description: 'Participating in CTFs, coding competitions, and hackathons to test problem-solving under pressure.'
+    },
+    {
+      title: 'Projects',
+      icon: 'code',
+      description: 'Collaborative development of open-source tools, technical scripts, and student projects.'
+    },
+    {
+      title: 'Community',
+      icon: 'groups',
+      description: 'A student-run network at SGGSIE&T bridging beginners and senior peers through peer mentorship.'
+    }
+  ];
 
   return (
-    <div className="w-full bg-[#0a0a0a] text-[#ffffff] min-h-screen font-mono">
-      
-      {/* 1. HERO SECTION (7-5 Grid Split per design.md) */}
-      <SectionEntrance className="relative pt-12 pb-24 md:py-24 border-b border-[#2a2a2a] overflow-hidden font-mono">
-        {/* Ambient glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#4ade80]/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <div className="bg-background text-text-primary min-h-screen font-sans antialiased">
+      <main className="pt-24 pb-20">
+        <JoinModal 
+          isOpen={isJoinModalOpen} 
+          onClose={() => setIsJoinModalOpen(false)} 
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Column (7 cols): Editorial & CTAs */}
-            <div className="lg:col-span-7 space-y-6">
-              
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse"></span>
-                <span className="text-[#4ade80] font-semibold">HACKIT 2026 SEASON IS LIVE</span>
-                <span className="text-[#888888]">|</span>
-                <span className="text-[#cccccc]">DEFCON Quals Squad Active</span>
-              </div>
-
-              {/* Display Headline */}
-              <h1 className="display-xl text-[#ffffff] tracking-tight font-mono">
-                Student security research. <br />
-                <span className="text-[#4ade80]">Kernel exploits to CTF podiums.</span>
-              </h1>
-
-              {/* Sub-headline */}
-              <p className="text-base text-[#cccccc] max-w-xl leading-relaxed font-mono">
-                We're an open student collective breaking binaries, reverse engineering malware in Ghidra, and competing in DEFCON Quals, PicoCTF, and Midnight Sun. We write custom pwn payloads, audit Linux kernel 6.8 primitives, and ship open-source security tooling.
-              </p>
-
-              {/* CTA Row */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <Button variant="primary" size="lg" onClick={onOpenJoin} className="gap-2 text-sm font-mono font-bold">
-                  <span>$ hackit join</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-                
-                <Link to="/events">
-                  <Button variant="secondary" size="lg" className="gap-2 text-sm font-mono font-bold">
-                    <Trophy className="w-4 h-4 text-[#4ade80]" />
-                    <span>$ hackit events</span>
-                  </Button>
-                </Link>
-              </div>
-
-            </div>
-
-            {/* Right Column (5 cols): Functional Terminal Mockup */}
-            <div className="lg:col-span-5 w-full font-mono">
-              <TerminalMockup onOpenJoin={onOpenJoin} />
-            </div>
-
-          </div>
-        </div>
-      </SectionEntrance>
-
-      {/* 2. SINGLE TERMINAL-STYLE system.status() TELEMETRY READOUT BLOCK */}
-      <SectionEntrance id="telemetry-dashboard" className="py-20 bg-[#121212] border-b border-[#2a2a2a] font-mono">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl p-6 sm:p-8 font-mono shadow-2xl space-y-6">
-            
-            {/* Terminal Window Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#2a2a2a]">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-[#ef4444]/90"></div>
-                <div className="w-3 h-3 rounded-full bg-[#f59e0b]/90"></div>
-                <div className="w-3 h-3 rounded-full bg-[#4ade80]/90"></div>
-                <span className="text-xs text-[#4ade80] font-bold ml-2">system.status()</span>
-              </div>
-              <div className="text-[11px] text-[#5a5a5a] flex items-center gap-2">
-                <Activity className="w-3.5 h-3.5 text-[#4ade80] animate-pulse" />
-                <span>UPDATED: 2026-07-23 [STATUS_OK]</span>
-              </div>
-            </div>
-
-            {/* Telemetry Output Key-Value Grid */}
-            <div className="bg-[#121212] border border-[#2a2a2a] rounded-lg p-5 space-y-4 font-mono text-xs">
-              <div className="text-[#5a5a5a] text-[11px]">// Live cluster node parameters & telemetry metrics</div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 rounded space-y-2 font-mono">
-                  <div className="text-[#5a5a5a] text-[10px] uppercase font-bold">sys.operators_active</div>
-                  <div className="flex items-baseline justify-between">
-                    <StatCounter value={779} suffix="+" delay={0} />
-                    <span className="text-[10px] text-[#4ade80] font-bold">[ONLINE]</span>
-                  </div>
-                  <div className="text-[11px] text-[#888888] font-mono">Verified student & researcher accounts</div>
-                </div>
-
-                <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 rounded space-y-2 font-mono">
-                  <div className="text-[#5a5a5a] text-[10px] uppercase font-bold">ctf.podium_finishes</div>
-                  <div className="flex items-baseline justify-between">
-                    <StatCounter value={47} suffix="" delay={100} />
-                    <span className="text-[10px] text-[#4ade80] font-bold">[VERIFIED]</span>
-                  </div>
-                  <div className="text-[11px] text-[#888888] font-mono">DEFCON Quals & National CTFs</div>
-                </div>
-
-                <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 rounded space-y-2 font-mono">
-                  <div className="text-[#5a5a5a] text-[10px] uppercase font-bold">labs.workshops_held</div>
-                  <div className="flex items-baseline justify-between">
-                    <StatCounter value={120} suffix="+" delay={200} />
-                    <span className="text-[10px] text-[#4ade80] font-bold">[ACTIVE]</span>
-                  </div>
-                  <div className="text-[11px] text-[#888888] font-mono">Kernel Pwn, Web & Crypto workshops</div>
-                </div>
-
-                <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 rounded space-y-2 font-mono">
-                  <div className="text-[#5a5a5a] text-[10px] uppercase font-bold">bounties.cve_disclosed</div>
-                  <div className="flex items-baseline justify-between">
-                    <StatCounter value={50} prefix="$" suffix="k+" delay={300} />
-                    <span className="text-[10px] text-[#4ade80] font-bold">[LOGGED]</span>
-                  </div>
-                  <div className="text-[11px] text-[#888888] font-mono">Ethical disclosures to CVE databases</div>
-                </div>
-
-              </div>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between text-[11px] text-[#5a5a5a] font-mono">
-              <span>$ cat /proc/hackit_status // 0 system faults</span>
-              <span className="text-[#4ade80]">HEALTH: 100% OPERATIONAL</span>
-            </div>
-
-          </div>
-
-        </div>
-      </SectionEntrance>
-
-      {/* 3. FEATURE CARDS SECTION (What HackIT Does) */}
-      <SectionEntrance id="research-pods" className="py-24 bg-[#0a0a0a] border-b border-[#2a2a2a] font-mono">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="text-xs font-semibold text-[#4ade80] uppercase tracking-widest font-mono">
-              // RESEARCH & COMPETITION PODS
-            </span>
-            <h2 className="display-lg text-[#ffffff] font-mono">
-              Built for every modern security discipline.
-            </h2>
-            <p className="text-base text-[#cccccc] font-mono">
-              From low-level binary exploitation to cloud infrastructure auditing, HackIT operates specialized pods led by veteran CTF players.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-mono">
-            
-            {/* Full-bleed Green Feature Card */}
-            <div className="lg:col-span-2 bg-[#4ade80] text-[#0a0a0a] rounded-xl p-8 space-y-6 flex flex-col justify-between card-hover">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-lg bg-[#0a0a0a] text-[#4ade80] flex items-center justify-center">
-                  <Trophy className="w-6 h-6" />
-                </div>
-                <span className="inline-block px-3 py-1 rounded-full bg-[#0a0a0a]/10 text-[#0a0a0a] text-xs font-mono font-bold uppercase tracking-wider">
-                  FLAGSHIP PROGRAM
-                </span>
-                <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[#0a0a0a] font-mono">
-                  Competitive CTF Squad & Global Tournaments
-                </h3>
-                <p className="text-sm md:text-base text-[#0a0a0a]/90 leading-relaxed max-w-xl font-mono">
-                  We field teams for DEFCON, PicoCTF, Midnight Sun, and Google CTF. Members receive dedicated GPU server compute, reverse engineering tool licenses, and joint attack-defense training.
-                </p>
-              </div>
-
-              <div className="pt-4 flex items-center justify-between border-t border-[#0a0a0a]/15 font-mono">
-                <span className="text-xs font-bold uppercase tracking-wider">
-                  14 Podium Finishes in 2025/2026
-                </span>
-                <Button 
-                  variant="secondary" 
-                  onClick={onOpenJoin}
-                  className="bg-[#0a0a0a] text-[#ffffff] hover:bg-[#1a1a1a] text-xs font-mono font-bold"
-                >
-                  $ hackit ctf join
-                </Button>
-              </div>
-            </div>
-
-            {/* Dark Feature Card 1: Binary Exploitation */}
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-8 space-y-4 flex flex-col justify-between group font-mono">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-lg bg-[#121212] border border-[#2a2a2a] text-[#4ade80] flex items-center justify-center group-hover:border-[#4ade80] transition-colors">
-                  <Cpu className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#ffffff] font-mono">
-                  Binary Exploitation & Pwn
-                </h3>
-                <p className="text-xs text-[#cccccc] leading-relaxed font-mono">
-                  Master ROP chains, heap exploitation, kernel UAF primitives, and ARM shellcoding using GDB, GEF, and custom Python exploits.
-                </p>
-              </div>
-              <div className="text-xs font-mono text-[#888888] pt-4 border-t border-[#2a2a2a]">
-                TRACK: PWN & KERNEL
-              </div>
-            </div>
-
-            {/* Dark Feature Card 2: Web & Cloud Security */}
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-8 space-y-4 flex flex-col justify-between group font-mono">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-lg bg-[#121212] border border-[#2a2a2a] text-[#4ade80] flex items-center justify-center group-hover:border-[#4ade80] transition-colors">
-                  <Code className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#ffffff] font-mono">
-                  Web & Cloud Auditing
-                </h3>
-                <p className="text-xs text-[#cccccc] leading-relaxed font-mono">
-                  Analyze complex web architectures, OAuth 2.0 implementation flaws, SSRF, GraphQL introspection bypasses, and AWS IAM privilege escalation.
-                </p>
-              </div>
-              <div className="text-xs font-mono text-[#888888] pt-4 border-t border-[#2a2a2a]">
-                TRACK: WEB & CLOUD
-              </div>
-            </div>
-
-            {/* Dark Feature Card 3: Reverse Engineering */}
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-8 space-y-4 flex flex-col justify-between group font-mono">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-lg bg-[#121212] border border-[#2a2a2a] text-[#4ade80] flex items-center justify-center group-hover:border-[#4ade80] transition-colors">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#ffffff] font-mono">
-                  Reverse Engineering
-                </h3>
-                <p className="text-xs text-[#cccccc] leading-relaxed font-mono">
-                  Deobfuscate malware samples, unpack custom binary protectors, and script Ghidra & Binary Ninja headless analysis plugins.
-                </p>
-              </div>
-              <div className="text-xs font-mono text-[#888888] pt-4 border-t border-[#2a2a2a]">
-                TRACK: RE & MALWARE
-              </div>
-            </div>
-
-            {/* Dark Feature Card 4: Cryptography & Math */}
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-8 space-y-4 flex flex-col justify-between group font-mono">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-lg bg-[#121212] border border-[#2a2a2a] text-[#4ade80] flex items-center justify-center group-hover:border-[#4ade80] transition-colors">
-                  <Lock className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#ffffff] font-mono">
-                  Applied Cryptography
-                </h3>
-                <p className="text-xs text-[#cccccc] leading-relaxed font-mono">
-                  Solve lattice reduction attacks (LLL), ECC discrete logarithms, RSA Coppersmith's theorem, and post-quantum algorithm audits.
-                </p>
-              </div>
-              <div className="text-xs font-mono text-[#888888] pt-4 border-t border-[#2a2a2a]">
-                TRACK: CRYPTO & MATH
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </SectionEntrance>
-
-      {/* 4. UPCOMING EVENTS SPOTLIGHT */}
-      <SectionEntrance id="upcoming-events" className="py-24 bg-[#121212] border-b border-[#2a2a2a] font-mono">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <span className="text-xs font-semibold text-[#4ade80] uppercase tracking-widest font-mono">
-                // UPCOMING SCHEDULE
+        {/* Hero Section */}
+        <AnimatedSection className="max-w-6xl mx-auto px-4 sm:px-8 py-20 md:py-28 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <div className="lg:col-span-7 space-y-8">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 bg-accent rounded-full animate-pulse"></span>
+              <span className="font-sans text-xs text-accent uppercase tracking-widest font-bold">
+                HackIT SGGSIE&T • Nanded
               </span>
-              <h2 className="display-lg text-[#ffffff] font-mono">
-                Hands-on Workshops & Competitions
-              </h2>
             </div>
-            <Link to="/events">
-              <Button variant="secondary" className="gap-2 font-mono text-xs">
-                <span>$ hackit events --all</span>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono">
-            {upcomingEvents.map((evt) => (
-              <div 
-                key={evt.id}
-                className="bg-[#1a1a1a] border border-[#2a2a2a] card-hover rounded-xl p-6 flex flex-col justify-between space-y-6 font-mono"
+            <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-extrabold text-text-primary leading-tight tracking-tight uppercase">
+              Learn. Build. <br/>Compete.
+            </h1>
+
+            <p className="text-lg text-text-secondary max-w-xl leading-relaxed">
+              We are a student-led cybersecurity and technology community. Through hands-on workshops, active project development, and competitive tournaments, we prepare students for real-world engineering.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                onClick={() => setIsJoinModalOpen(true)}
+                className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft hover:shadow-md active:scale-[0.98]"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between font-mono">
-                    <span className="px-2.5 py-1 rounded-full bg-[#4ade80]/15 text-[#4ade80] border border-[#4ade80]/30 text-xs font-semibold">
-                      {evt.type}
-                    </span>
-                    <span className="text-xs text-[#888888]">{evt.capacityInfo}</span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-[#ffffff] leading-tight font-mono">
-                    {evt.title}
-                  </h3>
-
-                  <p className="text-xs text-[#cccccc] line-clamp-3 leading-relaxed font-mono">
-                    {evt.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-[#2a2a2a] space-y-3 font-mono">
-                  <div className="text-xs text-[#888888] flex items-center justify-between">
-                    <span>{evt.date}</span>
-                    <span className="text-[#4ade80]">{evt.prizes}</span>
-                  </div>
-                  
-                  <Button 
-                    variant="primary" 
-                    size="sm" 
-                    onClick={() => onOpenEvent(evt)} 
-                    className="w-full text-xs font-mono font-bold"
-                  >
-                    {evt.ctaLabel}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </SectionEntrance>
-
-      {/* 5. TERMINAL PROMPT REVEAL CTA SECTION */}
-      <SectionEntrance className="py-20 bg-[#0a0a0a] font-mono">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-8 md:p-12 font-mono shadow-2xl space-y-6 card-hover">
-            
-            <div className="flex items-center justify-between border-b border-[#2a2a2a] pb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ef4444]/80"></div>
-                <div className="w-3 h-3 rounded-full bg-[#f59e0b]/80"></div>
-                <div className="w-3 h-3 rounded-full bg-[#4ade80]/80"></div>
-                <span className="text-xs text-[#888888] ml-2">hackit://membership-challenge</span>
-              </div>
-              <span className="text-xs text-[#4ade80] font-bold">[INTERACTIVE PROMPT]</span>
-            </div>
-
-            <div className="space-y-3 font-mono">
-              <div className="text-[#4ade80] text-sm font-bold flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-[#4ade80]" />
-                <span>$ hackit join --track=redteam</span>
-              </div>
-              <p className="text-xs md:text-sm text-[#cccccc] font-mono leading-relaxed max-w-2xl">
-                Whether you're breaking your first buffer overflow or auditing Linux kernel primitives, drop by our Thursday night lab sessions or jump into our Discord server to start auditing binaries, writing exploit payloads, and solving CTF challenges with us.
-              </p>
-            </div>
-
-            <div className="pt-4 flex flex-wrap items-center gap-4 font-mono">
-              <Button 
-                variant="primary" 
-                size="lg" 
-                onClick={onOpenJoin}
-                className="font-mono text-sm font-bold gap-2"
+                Join HackIT Community
+              </button>
+              <Link
+                to="/events"
+                className="px-7 py-3.5 bg-surface text-text-primary hover:bg-surface-secondary border border-border hover:border-border-hover font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft active:scale-[0.98]"
               >
-                <span>$ execute membership_app</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-              
-              <Link to="/resources">
-                <Button 
-                  variant="secondary" 
-                  size="lg" 
-                  className="font-mono text-sm font-bold"
-                >
-                  $ cat /docs/writeups
-                </Button>
+                Explore Events
               </Link>
             </div>
-
           </div>
-        </div>
-      </SectionEntrance>
 
+          {/* Right Column: Visual Academic Showcase (Human element / illustration frame) */}
+          <div className="lg:col-span-5 hidden lg:block">
+            <div className="bg-surface border border-border p-6 shadow-soft rounded-[28px] relative">
+              <div className="absolute -top-3 -right-3 w-12 h-12 border-t-2 border-r-2 border-accent rounded-tr-[16px] opacity-40"></div>
+              <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-2 border-l-2 border-accent rounded-bl-[16px] opacity-40"></div>
+              
+              <div className="space-y-4">
+                <div className="bg-surface-secondary aspect-[4/3] flex items-center justify-center border border-border relative overflow-hidden group rounded-[20px]">
+                  {/* Geometric academic/security background illustration */}
+                  <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#8b2222_1.5px,transparent_1.5px)] [background-size:20px_20px] dark:opacity-20 dark:bg-[radial-gradient(#a63232_1.5px,transparent_1.5px)]"></div>
+                  <div className="relative z-10 text-center p-6 space-y-3">
+                    <div className="w-12 h-12 bg-accent/10 text-accent flex items-center justify-center mx-auto rounded-full">
+                      <span className="material-symbols-outlined text-2xl">school</span>
+                    </div>
+                    <h4 className="font-sans font-bold text-sm text-text-primary">SGGSIE&T Campus Activity</h4>
+                    <p className="text-xs text-text-secondary max-w-[200px] mx-auto leading-relaxed">Peer-to-peer knowledge sharing and live labs.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 text-[11px] text-text-secondary font-sans font-semibold tracking-wider">
+                  <span>SYSTEM STATUS: ACTIVE</span>
+                  <span>EST. 2024</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* Space wrapper instead of line divider */}
+        <div className="py-8 bg-surface-secondary/40 border-y border-border/50">
+          {/* What We Do */}
+          <section className="max-w-6xl mx-auto px-4 sm:px-8 py-20">
+            <AnimatedSection className="mb-12">
+              <span className="font-sans text-xs text-accent uppercase tracking-wider font-bold block mb-2">Pillars</span>
+              <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight uppercase">
+                Our Core Focus
+              </h2>
+              <p className="text-sm text-text-secondary mt-2 max-w-xl">
+                HackIT channels student creativity and technical curiosity into structured learning paths.
+              </p>
+            </AnimatedSection>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {focusAreas.map((area, index) => (
+                <AnimatedCard key={area.title} index={index}>
+                  <div className="bg-surface border border-border p-6 h-full flex flex-col justify-between card-hover group shadow-soft rounded-[24px] hover:border-border-hover">
+                    <div>
+                      <div className="w-12 h-12 bg-accent-subtle text-accent flex items-center justify-center mb-6 rounded-full group-hover:bg-accent group-hover:text-white transition-all">
+                        <span className="material-symbols-outlined text-xl">{area.icon}</span>
+                      </div>
+
+                      <h3 className="font-sans text-base font-bold text-text-primary mb-3">
+                        {area.title}
+                      </h3>
+
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {area.description}
+                      </p>
+                    </div>
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        {/* Recent Milestones */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-8 py-24">
+          <AnimatedSection className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="font-sans text-xs text-accent uppercase tracking-wider font-bold block mb-2">History</span>
+              <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight uppercase">
+                Recent Milestones
+              </h2>
+              <p className="text-sm text-text-secondary mt-2">
+                Significant achievements from the 2025-26 academic year.
+              </p>
+            </div>
+            <Link
+              to="/events"
+              className="text-sm text-accent hover:text-accent-hover font-bold transition-colors shrink-0 flex items-center gap-1.5 bg-accent-subtle px-4 py-2 rounded-full"
+            >
+              View Full Timeline →
+            </Link>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {milestonesData.map((evt, idx) => (
+              <AnimatedCard key={evt.id} index={idx}>
+                <div className="bg-surface border border-border p-6 h-full flex flex-col justify-between card-hover shadow-soft rounded-[24px] hover:border-border-hover">
+                  <div>
+                    <div className="flex items-center justify-between text-xs text-text-secondary mb-5">
+                      <span className="px-3.5 py-1 bg-accent-subtle text-accent font-bold rounded-full">
+                        {evt.category}
+                      </span>
+                      <span className="font-semibold">{evt.date}</span>
+                    </div>
+                    <h3 className="font-sans text-lg font-bold text-text-primary mb-3 leading-snug">{evt.title}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed mb-5">{evt.summary}</p>
+                  </div>
+                  <div className="pt-4 border-t border-surface-secondary text-xs text-text-secondary flex items-center gap-1.5 font-medium">
+                    <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+                    <span>{evt.venue}</span>
+                  </div>
+                </div>
+              </AnimatedCard>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-8 py-10">
+          <AnimatedSection>
+            <div className="bg-surface border border-border p-8 sm:p-16 text-center max-w-4xl mx-auto relative shadow-soft rounded-[28px]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-accent rounded-b-[4px]"></div>
+              
+              <h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-text-primary uppercase tracking-tight mb-4">
+                Join SGGSIE&T&apos;s Engineering Community
+              </h3>
+
+              <p className="text-sm text-text-secondary max-w-xl mx-auto mb-8 leading-relaxed">
+                HackIT is a peer-driven environment. Whether you want to write your first program, deploy servers, or hack flags, you will build real skills through collaborative challenges.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <button
+                  onClick={() => setIsJoinModalOpen(true)}
+                  className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-sans text-sm font-bold transition-all rounded-[16px] shadow-soft active:scale-[0.98]"
+                >
+                  Apply to Join
+                </button>
+                <Link
+                  to="/team"
+                  className="px-7 py-3.5 bg-surface-secondary text-text-primary hover:bg-border border border-border font-sans text-sm font-bold transition-all rounded-[16px] active:scale-[0.98]"
+                >
+                  Meet student leaders
+                </Link>
+              </div>
+            </div>
+          </AnimatedSection>
+        </section>
+      </main>
     </div>
   );
 }
