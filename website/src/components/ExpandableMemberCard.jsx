@@ -66,7 +66,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           </motion.div>
 
           {/* Position/Role Badge */}
-          {isLeadership && (
+          {(isLeadership || (member.role && member.role !== "Core Committee Member")) && (
             <motion.span 
               layout="position"
               className="inline-block mt-4 px-2.5 py-0.5 bg-accent-subtle text-accent text-[9px] font-bold rounded uppercase tracking-wider"
@@ -82,7 +82,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
             className={`font-sans font-bold text-text-primary leading-snug mt-3 ${isLeadership ? 'text-base' : 'text-sm'}`}
             transition={customTransition}
           >
-            {member.name}
+            {member.name || (isLeadership ? "Position Open" : "Core Member")}
           </motion.h3>
 
           {/* Short Specialization/Domain */}
@@ -91,40 +91,42 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
             className="text-xs text-text-secondary mt-1 font-medium leading-relaxed"
             transition={customTransition}
           >
-            {member.domain}
+            {member.domain || "HackIT Coordinator"}
           </motion.p>
         </div>
 
         {/* Small Social Icon Links for the Compact Card */}
-        <motion.div 
-          layout="position"
-          className="pt-4 mt-5 border-t border-surface-secondary flex items-center gap-2.5" 
-          onClick={(e) => e.stopPropagation()}
-          transition={customTransition}
-        >
-          {member.linkedin && (
-            <a 
-              href={member.linkedin} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="social-icon-btn w-8 h-8"
-              aria-label={`${member.name}'s LinkedIn Profile`}
-            >
-              <Linkedin size={14} />
-            </a>
-          )}
-          {member.github && (
-            <a 
-              href={member.github} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="social-icon-btn w-8 h-8"
-              aria-label={`${member.name}'s GitHub Profile`}
-            >
-              <Github size={14} />
-            </a>
-          )}
-        </motion.div>
+        {(member.linkedin || member.github) && (
+          <motion.div 
+            layout="position"
+            className="pt-4 mt-5 border-t border-surface-secondary flex items-center gap-2.5" 
+            onClick={(e) => e.stopPropagation()}
+            transition={customTransition}
+          >
+            {member.linkedin && (
+              <a 
+                href={member.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon-btn w-8 h-8"
+                aria-label={`${member.name || 'Member'}'s LinkedIn Profile`}
+              >
+                <Linkedin size={14} />
+              </a>
+            )}
+            {member.github && (
+              <a 
+                href={member.github} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon-btn w-8 h-8"
+                aria-label={`${member.name || 'Member'}'s GitHub Profile`}
+              >
+                <Github size={14} />
+              </a>
+            )}
+          </motion.div>
+        )}
       </motion.div>
 
       {/* RIGHT COLUMN: The Detail Panel (Revealed smoothly on the right) */}
@@ -161,16 +163,27 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           }}
           className="w-[280px] sm:w-[500px] flex flex-col h-full justify-between"
         >
-          <div className="space-y-5">
+          <div className="space-y-6">
+            {/* Expanded Header */}
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-accent uppercase tracking-widest block">{member.role}</span>
+              <h3 className="text-2xl font-bold text-text-primary leading-tight font-sans tracking-tight">
+                {member.name || (isLeadership ? "Position Open" : "Core Member")}
+              </h3>
+              <p className="text-sm text-text-secondary font-sans font-medium">
+                {member.domain || "HackIT Coordinator"}
+              </p>
+            </div>
+
             {/* Technical Focus tag pills */}
             {member.domains && member.domains.length > 0 && (
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest block">Technical Focus</span>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block">Technical Focus</span>
+                <div className="flex flex-wrap gap-2">
                   {member.domains.map((dom) => (
                     <span 
                       key={dom}
-                      className="px-2.5 py-1 bg-surface-secondary text-text-secondary hover:text-accent font-mono text-[10px] font-bold rounded-[6px] border border-border transition-colors duration-200"
+                      className="px-3.5 py-1.5 bg-surface-secondary text-text-secondary hover:text-accent font-mono text-xs font-bold rounded-[8px] border border-border transition-colors duration-200"
                     >
                       #{dom.replace(/\s+/g, '')}
                     </span>
@@ -179,13 +192,20 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
               </div>
             )}
 
-            {/* Biography */}
-            <div className="space-y-2">
-              <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest block">Biography</span>
-              <p className="text-xs text-text-secondary leading-relaxed font-sans">
-                {member.bio || `HackIT active contributor specializing in ${member.domain.toLowerCase()}.`}
-              </p>
-            </div>
+            {/* Email Contact Action */}
+            {member.email && (
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block">Contact & Liaison</span>
+                <a 
+                  href={`mailto:${member.email}`}
+                  className="group flex items-center gap-3 px-4 py-3 bg-surface-secondary hover:bg-accent-subtle hover:text-accent border border-border hover:border-accent/30 text-text-secondary font-mono text-sm rounded-[12px] transition-all duration-200 w-full sm:w-fit"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span className="material-symbols-outlined text-base text-accent group-hover:scale-110 transition-transform">mail</span>
+                  <span className="truncate">{member.email}</span>
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Social Links (Additional Action Buttons) & Collapse trigger */}

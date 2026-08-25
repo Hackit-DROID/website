@@ -22,10 +22,10 @@ export function FacultyCard({ faculty }) {
           Faculty Advisor
         </span>
         <h3 className="font-sans text-lg sm:text-xl font-bold text-text-primary mb-1.5">
-          {faculty.name}
+          {faculty.name || "Faculty Advisor (TBD)"}
         </h3>
         <p className="text-sm text-text-secondary mb-4 leading-relaxed">
-          {faculty.domain}
+          {faculty.domain || "SGGSIE&T Advisory"}
         </p>
 
         <div className="flex items-center justify-center sm:justify-start gap-4 text-xs text-text-secondary">

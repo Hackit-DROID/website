@@ -1,35 +1,35 @@
 // Team Data Structure for HackIT SGGSIE&T
-// Formatted with clean role-based placeholders as requested
+// Academic Year 2026-27 Official Roster
 
 export const faculty = {
   id: "faculty-coordinator",
-  name: "[Faculty Advisor Name]",
+  name: "Mr. R. P. Mathwale",
   role: "Faculty Advisor",
-  domain: "Department of Computer Science & Engineering",
-  bio: "Providing guidance on academic integrations, research directions, and cybersecurity laboratory development.",
-  domains: ["Machine Learning", "Neural Networks", "Image Processing", "Research Advisor"],
+  domain: "",
+  bio: "",
+  domains: [],
   image: "",
   github: "",
-  linkedin: "https://linkedin.com",
-  email: "faculty@sggs.ac.in"
+  linkedin: "",
+  email: ""
 };
 
-export const leadership = [
+export const officers = [
   {
     id: "lead-1",
-    name: "[President Name]",
+    name: "Ghananil Shirpurkar",
     role: "President",
     domain: "Cybersecurity & Community Lead",
     bio: "Coordinating club activities, workshops, and SGGSIE&T representation in national CTFs. Passionate about Linux kernels, system exploitation, and network security audits.",
-    domains: ["Reverse Engineering", "Binary Exploitation", "Linux Systems", "CTF Coordination"],
+    domains: ["Applied AI", "Cybersecurity", "Systems Engineering"],
     image: "/images/team/president.jpeg",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "president@sggs.ac.in"
+    github: "https://github.com/GhananilShirpurkar/",
+    linkedin: "https://www.linkedin.com/in/ghananil-shirpurkar23/",
+    email: "2025bit502@sggs.ac.in"
   },
   {
     id: "lead-2",
-    name: "[Vice President Name]",
+    name: "Sanchita Borkar",
     role: "Vice President",
     domain: "Web Security & Operations",
     bio: "Managing technical operations, server deployments, and infrastructure. Specialized in application penetration testing, secure code review, and cloud automation.",
@@ -37,11 +37,11 @@ export const leadership = [
     image: "/images/team/vice-president.jpeg",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    email: "vp@sggs.ac.in"
+    email: "2024bin011@sggs.ac.in"
   },
   {
     id: "lead-3",
-    name: "[Secretary Name]",
+    name: "Sainikesh Kokale",
     role: "Secretary",
     domain: "Events & Technical Coordination",
     bio: "Organizing event schedules, maintaining department liaison, and structuring technical labs. Specialized in encryption protocols and secure database architectures.",
@@ -49,107 +49,197 @@ export const leadership = [
     image: "/images/team/secretary.jpeg",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    email: "secretary@sggs.ac.in"
-  },
-  {
-    id: "lead-4",
-    name: "[Technical Lead Name]",
-    role: "Technical Lead",
-    domain: "Security Engineering & Systems",
-    bio: "Designing technical labs, CTF challenges, and vulnerability testing frameworks. Enthusiastic about kernel exploitation, system internals, and compiler security.",
-    domains: ["Exploit Development", "Kernel Security", "System Architecture", "CTF Designing"],
-    image: "/images/team/tech-lead.png",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "techlead@sggs.ac.in"
-  },
-  {
-    id: "lead-5",
-    name: "[Community Lead Name]",
-    role: "Community Lead",
-    domain: "Public Relations & Growth",
-    bio: "Fostering community engagement, onboarding new students, and managing public outreach. Passionate about OSINT, social engineering concepts, and peer mentorship networks.",
-    domains: ["OSINT", "Public Speaking", "Community Operations", "Event Management"],
-    image: "/images/team/community-lead.jpeg",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "community@sggs.ac.in"
+    email: "2024bcs037@sggs.ac.in"
   },
   {
     id: "lead-6",
-    name: "[Treasurer Name]",
+    name: "Rahul Gulade",
     role: "Treasurer",
-    domain: "Finance & Community Support",
-    bio: "Managing club sponsorships, event budgets, and community outreach. Enthusiastic about security compliance, forensic analysis, and open-source licensing models.",
-    domains: ["Digital Forensics", "OSINT", "Sponsorship Outreach", "Budget Management"],
+    domain: "",
+    bio: "",
+    domains: [],
     image: "",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "treasurer@sggs.ac.in"
+    github: "",
+    linkedin: "",
+    email: "2024bit002@sggs.ac.in"
   }
 ];
 
-const explicitCore = [
+export const leads = [
+  {
+    id: "lead-4",
+    name: "Aniket Somankar",
+    role: "Technical Lead",
+    domain: "Android Development, Python & C++",
+    bio: "Technical Head leading software development, system architecture, and tech stacks in C/C++, Java, Python, and web/mobile platforms. Focussed on code auditing and compiler systems.",
+    domains: ["Android Development", "Python", "C++"],
+    image: "/images/team/tech-lead.png",
+    github: "https://github.com/AniketSomankar-18",
+    linkedin: "https://www.linkedin.com/in/aniket-somankar/",
+    email: "2025bit507@sggs.ac.in"
+  },
+  {
+    id: "lead-7",
+    name: "Aditya Mirajgave",
+    role: "Content Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2024bit021@sggs.ac.in"
+  },
+  {
+    id: "lead-8",
+    name: "Tanishq Raut",
+    role: "Operations Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2024bit022@sggs.ac.in"
+  },
+  {
+    id: "lead-5",
+    name: "Rutuja Gavhane",
+    role: "Community Lead",
+    domain: "Public Relations & Growth",
+    bio: "Fostering community engagement, onboarding new students, and managing public outreach. Passionate about public speaking, outreach operations, and peer mentorship networks.",
+    domains: ["OSINT", "Public Speaking", "Community Operations"],
+    image: "/images/team/community-lead.jpeg",
+    github: "https://github.com",
+    linkedin: "https://www.linkedin.com/in/rutuja-vitthal-gavhane-064271356",
+    email: "2024bec010@sggs.ac.in"
+  },
+  {
+    id: "lead-9",
+    name: "Prerna Gaikwad",
+    role: "Knowledge Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2024bin017@sggs.ac.in"
+  },
+  {
+    id: "lead-10",
+    name: "Suhani Malviya",
+    role: "Alumni & Relations Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2024bce007@sggs.ac.in"
+  },
+  {
+    id: "lead-11",
+    name: "Ayush Asegaonkar",
+    role: "Alumni & Relations Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2024bpr015@sggs.ac.in"
+  }
+];
+
+export const leadership = [...officers, ...leads];
+
+export const coreCommittee = [
   {
     id: "core-member-1",
-    name: "[Technical Co-Lead Name]",
+    name: "Dipak Bhondekar",
     role: "Technical Co-Lead",
-    domain: "Web & Infrastructure Operations",
-    bio: "Assisting in technical coordination, maintaining lab environments, and organizing security exercises. Active core team coordinator for SGGSIE&T HackIT labs.",
-    domains: ["Web Security", "Infrastructure", "React", "Node.js"],
+    domain: "Flutter, React & Python",
+    bio: "IT student (Second Year) specialized in Flutter and app development with experience in cloud databases, Python data science libraries, and frontend frameworks.",
+    domains: ["Flutter", "React", "Python"],
     image: "/images/team/tech-co-lead.jpeg",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "tech.colead@sggs.ac.in"
+    github: "https://github.com/dipak-ops",
+    linkedin: "https://www.linkedin.com/in/dipak-bhondekar/",
+    email: "2025bit002@sggs.ac.in"
+  },
+  {
+    id: "core-member-4",
+    name: "Harsh Chandak",
+    role: "Content Co-Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2025bit015@sggs.ac.in"
+  },
+  {
+    id: "core-member-5",
+    name: "Krushnal Gawande",
+    role: "Operations Co-Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2025bit007@sggs.ac.in"
   },
   {
     id: "core-member-2",
-    name: "[Community Co-Lead Name]",
+    name: "Amar Dhekane",
     role: "Community Co-Lead",
-    domain: "Community Engagement & Operations",
-    bio: "Coordinating peer learning programs, student support, and event outreach. Active core team coordinator for SGGSIE&T HackIT labs.",
-    domains: ["Community Management", "Event Planning", "Outreach", "OSINT"],
+    domain: "C, C++ & Python",
+    bio: "Coordinating peer learning programs, student support, and event outreach. Passionate about C, C++, and Python programming.",
+    domains: ["C", "C++", "Python"],
     image: "/images/team/comunity-co-lead.png",
     github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "community.colead@sggs.ac.in"
+    linkedin: "https://www.linkedin.com/in/amar-dhekane-103629378",
+    email: "amardhekane87@gmail.com"
+  },
+  {
+    id: "core-member-6",
+    name: "Mohini Chombitkar",
+    role: "Knowledge Co-Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2025bcs118@sggs.ac.in"
+  },
+  {
+    id: "core-member-3",
+    name: "Jayant Solanki",
+    role: "Knowledge Co-Lead",
+    domain: "Cybersecurity & Networking",
+    bio: "Knowledge Co-Lead specializing in cybersecurity, network architecture, and penetration testing. Focused on security assessments and secure network topologies.",
+    domains: ["Cybersecurity", "Networking"],
+    image: "/images/team/knowledge-co-lead.jpeg",
+    github: "https://github.com/jayantsolanki19b",
+    linkedin: "https://www.linkedin.com/in/jayant-solanki-a0715a3a2",
+    email: "2025bcs056@sggs.ac.in"
+  },
+  {
+    id: "core-member-7",
+    name: "Sanika Kadam",
+    role: "Alumni & Relations Co-Lead",
+    domain: "",
+    bio: "",
+    domains: [],
+    image: "",
+    github: "",
+    linkedin: "",
+    email: "2025bec053@sggs.ac.in"
   }
 ];
-
-const generatedCore = Array.from({ length: 12 }, (_, index) => {
-  const num = index + 3;
-  const focusAreas = [
-    ["Web Security", "React", "Node.js", "API Testing"],
-    ["Competitive Programming", "C++", "Data Structures", "Algorithms"],
-    ["Linux Systems", "Bash Scripting", "Firewall Audits", "Git"],
-    ["Cybersecurity", "CTF Competing", "Cryptography", "Network Security"]
-  ];
-  
-  const bios = [
-    "Focused on building secure web portals and examining API vulnerabilities. Active contributor to open source frameworks.",
-    "Algorithm enthusiast and competitive coder. Enjoys optimizing complex data pipelines and solving algorithmic puzzles.",
-    "Systems engineer managing Linux environments, server setups, and automated deployment scripts.",
-    "Cybersecurity researcher interested in digital forensics, cryptanalysis, and capture-the-flag competitions."
-  ];
-
-  const domains = focusAreas[index % focusAreas.length];
-  const bio = bios[index % bios.length] + " Active core team coordinator for SGGSIE&T HackIT labs.";
-
-  return {
-    id: `core-member-${num}`,
-    name: `[Core Member Name ${num}]`,
-    role: "Core Committee Member",
-    domain: domains[0] + " & Operations",
-    bio: bio,
-    domains: domains,
-    image: "",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: `member${num}@sggs.ac.in`
-  };
-});
-
-export const coreCommittee = [...explicitCore, ...generatedCore];
 
 export const teamData = {
   faculty,
