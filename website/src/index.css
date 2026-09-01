@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfbf9;
+  --background: #fafaf7;
   --surface: #ffffff;
-  --surface-secondary: #f4f4f0;
-  --text-primary: #1d1d1f;
-  --text-secondary: #5e5e62;
+  --surface-secondary: #f3f3ee;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
   --accent: #8b2222; /* Deep crimson academic red */
   --accent-hover: #aa2d2d;
-  --accent-subtle: rgba(139, 34, 34, 0.05);
-  --border: #e3e3e0;
-  --border-hover: #d2d2cd;
+  --accent-subtle: rgba(139, 34, 34, 0.06);
+  --border: #e4e4e0;
+  --border-hover: #d1d1cc;
   
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .dark {
@@ -147,5 +150,36 @@
 .no-layout-transition *:not(.social-icon-btn) {
   transition-property: background-color, color, border-color, box-shadow !important;
 }
+
+/* Glassfrosted Capsule Utility */
+.glass-capsule {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(228, 228, 224, 0.8);
+}
+.dark .glass-capsule {
+  background: rgba(23, 23, 25, 0.75);
+  border: 1px solid rgba(39, 39, 42, 0.8);
+}
+
+/* Cyber Radial Grid Background */
+.bg-cyber-grid {
+  background-image: radial-gradient(rgba(139, 34, 34, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark .bg-cyber-grid {
+  background-image: radial-gradient(rgba(166, 50, 50, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Accessibility: Keyboard Navigation Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+  border-radius: 6px;
+}
+
+
 
 

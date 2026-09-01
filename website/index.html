@@ -4,19 +4,64 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/fevicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111113" />
-    <meta name="description" content="HackIT — Cybersecurity and technology community at SGGSIE&T, Nanded. Workshops, CTFs, projects, and hackathons." />
-    <meta name="keywords" content="HackIT, SGGSIE&T, Cybersecurity Club, CTF, Workshops, Student Community, Nanded" />
-    
-    <!-- Google Fonts: Inter (primary), JetBrains Mono (code accent), Material Symbols -->
+    <meta name="theme-color" content="#0f0f10" />
+    <title>HackIT — SGGSIE&T Student Tech & Cybersecurity Community</title>
+    <meta name="description" content="Official student-led cybersecurity and technology community at SGGSIE&T, Nanded. Hands-on workshops, project labs, coding competitions, and peer mentorship." />
+    <meta name="keywords" content="HackIT, SGGSIE&T, SGGSIET, Cybersecurity, Ethical Hacking, Coding Club, Student Community, Nanded, Engineering" />
+    <meta name="author" content="HackIT SGGSIE&T" />
+
+    <!-- OpenGraph Meta Tags (WhatsApp, LinkedIn, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="HackIT SGGSIE&T" />
+    <meta property="og:title" content="HackIT — SGGSIE&T Student Tech & Cybersecurity Community" />
+    <meta property="og:description" content="Official student-led technology community at SGGSIE&T Nanded. Building real-world engineering skills through hands-on labs and workshops." />
+    <meta property="og:image" content="/fevicon.png" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="HackIT — SGGSIE&T Student Community" />
+    <meta name="twitter:description" content="Student-led cybersecurity and technology engineering community at SGGSIE&T Nanded." />
+    <meta name="twitter:image" content="/fevicon.png" />
+
+    <!-- Google Fonts & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    
-    <title>HackIT — SGGSIE&T Cybersecurity Community</title>
+
+    <!-- Schema.org JSON-LD Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://sggs.ac.in/#organization",
+          "name": "Shri Guru Gobind Singhji Institute of Engineering and Technology",
+          "alternateName": "SGGSIE&T Nanded",
+          "url": "https://sggs.ac.in",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Nanded",
+            "addressRegion": "Maharashtra",
+            "postalCode": "431606",
+            "addressCountry": "IN"
+          }
+        },
+        {
+          "@type": "StudentSociety",
+          "name": "HackIT SGGSIE&T",
+          "alternateName": "HackIT Club",
+          "description": "Student-led cybersecurity and technology engineering community at SGGSIE&T Nanded.",
+          "parentOrganization": {
+            "@id": "https://sggs.ac.in/#organization"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
-  <body class="bg-[#111113] text-[#ececf1] font-sans antialiased min-h-screen">
+  <body class="bg-background text-text-primary font-sans antialiased min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

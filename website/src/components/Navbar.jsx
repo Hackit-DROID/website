@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -15,51 +25,79 @@ export function Navbar() {
   ];
 
   const ThemeToggleButton = () => (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.92 }}
       onClick={toggleTheme}
-      className="p-2.5 text-text-secondary hover:text-text-primary hover:bg-surface-secondary border border-border hover:border-border-hover transition-colors flex items-center justify-center rounded-[12px]"
+      className="p-2 text-text-secondary hover:text-text-primary hover:bg-surface-secondary/80 border border-border/80 transition-colors flex items-center justify-center rounded-full active:scale-95"
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      <span className="material-symbols-outlined text-base">
+      <motion.span
+        key={theme}
+        initial={{ rotate: -90, opacity: 0 }}
+        animate={{ rotate: 0, opacity: 1 }}
+        exit={{ rotate: 90, opacity: 0 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="material-symbols-outlined text-sm"
+      >
         {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-      </span>
-    </button>
+      </motion.span>
+    </motion.button>
   );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border py-1">
-      <div className="flex justify-between items-center w-full px-4 sm:px-8 py-3 max-w-6xl mx-auto">
+    <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
+      <nav
+        className={`max-w-4xl mx-auto glass-capsule rounded-full py-2 px-4 sm:px-6 pointer-events-auto flex items-center justify-between transition-all duration-300 ${
+          scrolled ? 'shadow-md border-border py-1.5' : 'shadow-soft border-border/70'
+        }`}
+      >
         {/* Brand */}
         <Link 
           to="/" 
-          className="flex items-center gap-3 group outline-none focus:outline-none"
+          className="flex items-center gap-2.5 group outline-none focus:outline-none"
         >
-          <img src="/fevicon.png" alt="HackIT Logo" className="w-8.5 h-8.5 object-contain rounded-[10px]" />
+          <motion.img 
+            whileHover={{ rotate: 5, scale: 1.08 }}
+            transition={{ type: 'spring', stiffness: 400 }}
+            src="/fevicon.png" 
+            alt="HackIT Logo" 
+            className="w-7 h-7 object-contain rounded-lg" 
+          />
           <div className="flex flex-col">
-            <span className="font-sans font-bold tracking-tight text-text-primary text-sm leading-none mb-0.5">
-              HackIT
+            <span className="font-mono font-bold tracking-tight text-text-primary text-xs leading-none">
+              HackIT<span className="text-accent ml-0.5">_</span>
             </span>
-            <span className="text-[10px] text-text-secondary font-semibold uppercase tracking-wider">
+            <span className="text-[9px] text-text-secondary font-mono tracking-widest uppercase mt-0.5">
               SGGSIE&T
             </span>
           </div>
         </Link>
 
         {/* Desktop Links + Theme Toggle */}
-        <div className="hidden md:flex items-center gap-3">
-          <div className="flex items-center gap-1.5 mr-1">
+        <div className="hidden md:flex items-center gap-1.5">
+          <div className="flex items-center gap-1 bg-surface-secondary/60 p-1 rounded-full border border-border/50 relative">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <NavLink
                   key={link.name}
                   to={link.path}
-                  className={
-                    isActive
-                      ? "px-4.5 py-2 text-accent bg-accent-subtle font-sans text-sm font-semibold rounded-[12px] transition-all duration-200"
-                      : "px-4.5 py-2 text-text-secondary hover:text-text-primary hover:bg-surface-secondary font-sans text-sm font-semibold rounded-[12px] transition-all duration-200"
+                  className={({ isActive: linkActive }) =>
+                    `relative px-4 py-1.5 font-sans text-xs font-bold rounded-full transition-colors z-10 ${
+                      linkActive
+                        ? 'text-accent'
+                        : 'text-text-secondary hover:text-text-primary'
+                    }`
                   }
                 >
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbarActivePill"
+                      className="absolute inset-0 bg-surface rounded-full shadow-sm -z-10"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
                   {link.name}
                 </NavLink>
               );
@@ -71,38 +109,50 @@ export function Navbar() {
         {/* Mobile Menu & Theme Toggle */}
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggleButton />
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.94 }}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-text-secondary hover:text-text-primary font-sans text-sm font-semibold border border-border bg-surface-secondary hover:bg-surface px-4 py-2 rounded-[12px] transition-colors duration-200"
+            className="p-2 text-text-secondary hover:text-text-primary bg-surface-secondary/80 border border-border/80 transition-colors flex items-center justify-center rounded-full active:scale-95"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? 'Close' : 'Menu'}
-          </button>
+            <span className="material-symbols-outlined text-sm">
+              {mobileMenuOpen ? 'close' : 'menu'}
+            </span>
+          </motion.button>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-surface border-b border-border px-4 py-4 space-y-1.5 rounded-b-[20px]">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `block px-4 py-2.5 text-sm font-sans font-semibold transition-colors duration-200 rounded-[12px] ${
-                  isActive
-                    ? 'text-accent bg-accent-subtle'
-                    : 'text-text-secondary hover:bg-surface-secondary hover:text-text-primary'
-                }`
-              }
-            >
-              {link.name}
-            </NavLink>
-          ))}
-        </div>
-      )}
-    </nav>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden max-w-4xl mx-auto mt-2 glass-capsule shadow-soft px-4 py-3 space-y-1 rounded-2xl pointer-events-auto"
+          >
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-xs font-sans font-bold transition-colors rounded-xl ${
+                    isActive
+                      ? 'text-accent bg-accent-subtle'
+                      : 'text-text-secondary hover:bg-surface-secondary/80 hover:text-text-primary'
+                  }`
+                }
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
 
