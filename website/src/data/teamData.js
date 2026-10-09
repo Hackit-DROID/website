@@ -8,7 +8,7 @@ export const faculty = {
   domain: "",
   bio: "",
   domains: [],
-  image: "",
+  image: "/images/team/mr-r-p-mathwale.jpeg",
   github: "",
   linkedin: "",
   email: ""
@@ -58,7 +58,7 @@ export const officers = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/rahul-gulade.jpeg",
     github: "",
     linkedin: "",
     email: "2024bit002@sggs.ac.in"
@@ -85,7 +85,7 @@ export const leads = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/aditya-mirajgave.jpeg",
     github: "",
     linkedin: "",
     email: "2024bit021@sggs.ac.in"
@@ -97,7 +97,7 @@ export const leads = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/tanishq-raut.jpeg",
     github: "",
     linkedin: "",
     email: "2024bit022@sggs.ac.in"
@@ -145,7 +145,7 @@ export const leads = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/ayush-asegaonkar.jpeg",
     github: "",
     linkedin: "",
     email: "2024bpr015@sggs.ac.in"
@@ -186,7 +186,7 @@ export const coreCommittee = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/krushnal-gawande.jpeg",
     github: "",
     linkedin: "",
     email: "2025bit007@sggs.ac.in"
@@ -234,7 +234,7 @@ export const coreCommittee = [
     domain: "",
     bio: "",
     domains: [],
-    image: "",
+    image: "/images/team/sanika-kadam.jpeg",
     github: "",
     linkedin: "",
     email: "2025bec053@sggs.ac.in"

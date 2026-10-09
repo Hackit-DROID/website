@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 export function LeadershipCard({ member }) {
+  const [imgError, setImgError] = useState(false);
   if (!member) return null;
 
   const initials = member.name && !member.name.startsWith('[')
@@ -10,8 +13,13 @@ export function LeadershipCard({ member }) {
       <div>
         {/* Photo / Initials */}
         <div className="w-full aspect-square bg-surface-secondary border border-border mb-4 flex items-center justify-center overflow-hidden text-accent font-sans text-3xl font-bold rounded-[20px]">
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+          {member.image && !imgError ? (
+            <img
+              src={member.image}
+              alt={member.name}
+              onError={() => setImgError(true)}
+              className="w-full h-full object-cover"
+            />
           ) : (
             <span>{initials}</span>
           )}

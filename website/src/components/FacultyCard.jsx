@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 export function FacultyCard({ faculty }) {
+  const [imgError, setImgError] = useState(false);
   if (!faculty) return null;
 
   const initials = faculty.name && !faculty.name.startsWith('[')
@@ -9,8 +12,13 @@ export function FacultyCard({ faculty }) {
     <div className="bg-surface border border-border p-6 sm:p-8 max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-6 rounded-[24px] shadow-soft hover:border-border-hover transition-all duration-200">
       {/* Photo / Initials */}
       <div className="w-24 h-24 sm:w-28 sm:h-28 bg-surface-secondary border border-border flex items-center justify-center shrink-0 overflow-hidden text-accent font-sans text-2xl font-bold rounded-[20px]">
-        {faculty.image ? (
-          <img src={faculty.image} alt={faculty.name} className="w-full h-full object-cover" />
+        {faculty.image && !imgError ? (
+          <img
+            src={faculty.image}
+            alt={faculty.name}
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover"
+          />
         ) : (
           <span>{initials}</span>
         )}

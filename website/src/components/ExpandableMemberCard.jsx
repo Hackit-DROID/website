@@ -1,21 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from './SocialIcons';
 
 // Helper to extract initials from placeholder names like [President Name]
 const getInitials = (name) => {
   if (!name) return "";
-  const cleanName = name.replace(/[\[\]]/g, "");
+  const cleanName = name.replace(/[[\]]/g, "");
   const parts = cleanName.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 };
 
 export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership = false }) {
-  if (!member) return null;
-
   const cardRef = useRef(null);
-  const initials = getInitials(member.name);
+  const [imgError, setImgError] = useState(false);
 
   // Smooth scroll into view to keep focus on the expanded card
   useEffect(() => {
@@ -27,6 +25,10 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
     }
   }, [isSelected]);
 
+  if (!member) return null;
+
+  const initials = getInitials(member.name);
+
   const customTransition = {
     layout: { type: 'tween', duration: 0.4, ease: [0.22, 1, 0.36, 1] }
   };
@@ -37,27 +39,32 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
       ref={cardRef}
       onClick={onClick}
       className={`bg-surface border rounded-[24px] shadow-soft flex flex-col sm:flex-row cursor-pointer overflow-hidden h-full w-full no-layout-transition
-        ${isSelected 
-          ? 'border-accent/40 ring-1 ring-accent/10 shadow-md p-6' 
+        ${isSelected
+          ? 'border-accent/40 ring-1 ring-accent/10 shadow-md p-6'
           : 'border-border hover:border-border-hover p-5'
         }`}
       transition={customTransition}
     >
       {/* LEFT COLUMN: The exact same compact card in both states */}
-      <motion.div 
+      <motion.div
         layout="position"
         className="w-full sm:w-[220px] flex flex-col justify-between shrink-0 h-full"
         transition={customTransition}
       >
         <div>
           {/* Profile Photo / Initials Fallback */}
-          <motion.div 
+          <motion.div
             layout="position"
             className="w-full aspect-square bg-surface-secondary border border-border flex items-center justify-center overflow-hidden rounded-[20px]"
             transition={customTransition}
           >
-            {member.image ? (
-              <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+            {member.image && !imgError ? (
+              <img
+                src={member.image}
+                alt={member.name}
+                onError={() => setImgError(true)}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div className="w-full h-full bg-accent-subtle/50 text-accent flex items-center justify-center font-mono font-extrabold text-3xl tracking-wider select-none">
                 {initials}
@@ -67,7 +74,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
 
           {/* Position/Role Badge */}
           {(isLeadership || (member.role && member.role !== "Core Committee Member")) && (
-            <motion.span 
+            <motion.span
               layout="position"
               className="inline-block mt-4 px-2.5 py-0.5 bg-accent-subtle text-accent text-[9px] font-bold rounded uppercase tracking-wider"
               transition={customTransition}
@@ -77,7 +84,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           )}
 
           {/* Full Name */}
-          <motion.h3 
+          <motion.h3
             layout="position"
             className={`font-sans font-bold text-text-primary leading-snug mt-3 ${isLeadership ? 'text-base' : 'text-sm'}`}
             transition={customTransition}
@@ -86,7 +93,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           </motion.h3>
 
           {/* Short Specialization/Domain */}
-          <motion.p 
+          <motion.p
             layout="position"
             className="text-xs text-text-secondary mt-1 font-medium leading-relaxed"
             transition={customTransition}
@@ -97,17 +104,17 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
 
         {/* Small Social Icon Links for the Compact Card */}
         {(member.linkedin || member.github) && (
-          <motion.div 
+          <motion.div
             layout="position"
-            className="pt-4 mt-5 border-t border-surface-secondary flex items-center gap-2.5" 
+            className="pt-4 mt-5 border-t border-surface-secondary flex items-center gap-2.5"
             onClick={(e) => e.stopPropagation()}
             transition={customTransition}
           >
             {member.linkedin && (
-              <a 
-                href={member.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="social-icon-btn w-8 h-8"
                 aria-label={`${member.name || 'Member'}'s LinkedIn Profile`}
               >
@@ -115,10 +122,10 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
               </a>
             )}
             {member.github && (
-              <a 
-                href={member.github} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={member.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="social-icon-btn w-8 h-8"
                 aria-label={`${member.name || 'Member'}'s GitHub Profile`}
               >
@@ -130,7 +137,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
       </motion.div>
 
       {/* RIGHT COLUMN: The Detail Panel (Revealed smoothly on the right) */}
-      <motion.div 
+      <motion.div
         layout="position"
         initial={false}
         animate={{
@@ -144,12 +151,12 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           opacity: { type: 'tween', duration: 0.3, delay: isSelected ? 0.05 : 0, ease: 'easeInOut' }
         }}
         className={`overflow-hidden flex flex-col justify-between
-          ${isSelected 
-            ? 'sm:ml-6 mt-6 sm:mt-0 sm:pl-6 sm:border-l border-border/60 flex-grow' 
+          ${isSelected
+            ? 'sm:ml-6 mt-6 sm:mt-0 sm:pl-6 sm:border-l border-border/60 flex-grow'
             : 'pointer-events-none'
           }`}
       >
-        <motion.div 
+        <motion.div
           layout="position"
           initial={false}
           animate={{
@@ -181,7 +188,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
                 <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block">Technical Focus</span>
                 <div className="flex flex-wrap gap-2">
                   {member.domains.map((dom) => (
-                    <span 
+                    <span
                       key={dom}
                       className="px-3.5 py-1.5 bg-surface-secondary text-text-secondary hover:text-accent font-mono text-xs font-bold rounded-[8px] border border-border transition-colors duration-200"
                     >
@@ -196,7 +203,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
             {member.email && (
               <div className="space-y-2.5">
                 <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block">Contact & Liaison</span>
-                <a 
+                <a
                   href={`mailto:${member.email}`}
                   className="group flex items-center gap-3 px-4 py-3 bg-surface-secondary hover:bg-accent-subtle hover:text-accent border border-border hover:border-accent/30 text-text-secondary font-mono text-sm rounded-[12px] transition-all duration-200 w-full sm:w-fit"
                   onClick={(e) => e.stopPropagation()}
@@ -212,10 +219,10 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
           <div className="pt-5 mt-6 border-t border-border/60 flex items-center justify-between text-xs">
             <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
               {member.linkedin && (
-                <a 
-                  href={member.linkedin} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon-btn"
                   aria-label={`${member.name}'s LinkedIn Profile`}
                 >
@@ -223,10 +230,10 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
                 </a>
               )}
               {member.github && (
-                <a 
-                  href={member.github} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon-btn"
                   aria-label={`${member.name}'s GitHub Profile`}
                 >
@@ -235,7 +242,7 @@ export function ExpandableMemberCard({ member, isSelected, onClick, isLeadership
               )}
             </div>
 
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 onClick(); // triggers toggle collapse
