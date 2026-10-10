@@ -59,6 +59,15 @@ export function EventDetails() {
   // Helper to get descriptive image alt text
   const getImageAlt = (imgUrl, eventTitle, idx) => {
     if (imgUrl.includes('github-kickstart')) {
+      if (imgUrl.includes('1789924070562')) {
+        return 'Speaker presenting Git and version control fundamentals to students in the IT Department AC Lab during GitHub Kickstart';
+      }
+      if (imgUrl.includes('1789924070713')) {
+        return 'Students actively practicing hands-on Git commands with mentors assisting during GitHub Kickstart';
+      }
+      if (imgUrl.includes('1789924070744')) {
+        return 'Workshop mentor guiding student participants across computer workstations during GitHub Kickstart';
+      }
       return 'GitHub Kickstart official workshop poster detailing Git fundamentals and repository workflows';
     }
     if (imgUrl.includes('commit-rush')) {

@@ -111,7 +111,10 @@ export const milestonesData = [
     prizes: "",
     coverImage: "/images/event-media/github-kickstart/WhatsApp Image 2026-09-03 at 11.39.16 PM.jpeg",
     gallery: [
-      "/images/event-media/github-kickstart/WhatsApp Image 2026-09-03 at 11.39.16 PM.jpeg"
+      "/images/event-media/github-kickstart/WhatsApp Image 2026-09-03 at 11.39.16 PM.jpeg",
+      "/images/event-media/github-kickstart/1789924070562.jpeg",
+      "/images/event-media/github-kickstart/1789924070713.jpeg",
+      "/images/event-media/github-kickstart/1789924070744.jpeg"
     ],
     report: "The workshop equipped participants with essential version control concepts, preparing students to manage code repositories and collaborate on technical projects.",
     featured: true
