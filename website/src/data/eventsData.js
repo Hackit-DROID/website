@@ -86,6 +86,107 @@ export const milestonesData = [
     gallery: [],
     report: "Code Clash 2.0 saw a significant rise in average solving speeds compared to the previous edition. It served as a prime selection pool for the club's advanced coding group.",
     featured: true
+  },
+  {
+    id: "milestone-5",
+    slug: "github-kickstart",
+    title: "GitHub Kickstart",
+    category: "Workshop",
+    date: "6 September 2026",
+    startDate: "2026-09-06",
+    endDate: "2026-09-06",
+    status: "Completed",
+    venue: "AC Lab, IT Department, SGGSIE&T, Nanded",
+    venueDisplay: "AC Lab, IT Department, SGGSIE&T",
+    summary: "An introductory Git and GitHub workshop designed to help students understand version control and begin collaborating on software projects.",
+    description: "GitHub Kickstart introduced students to the fundamentals of version control and collaborative software development. The workshop was designed to help participants understand how Git tracks code changes and how GitHub supports repository management and teamwork. It provided a foundation for organizing projects, maintaining code history, and contributing to collaborative development.",
+    highlights: [
+      "Introduction to Git and version control",
+      "Understanding repositories, commits, and change history",
+      "Introduction to GitHub and collaborative workflows",
+      "Preparing students for future open-source contributions"
+    ],
+    domains: ["Git", "GitHub", "Version Control", "Open Source"],
+    participants: "IT Department Students",
+    prizes: "",
+    coverImage: "/images/event-media/github-kickstart/WhatsApp Image 2026-09-03 at 11.39.16 PM.jpeg",
+    gallery: [
+      "/images/event-media/github-kickstart/WhatsApp Image 2026-09-03 at 11.39.16 PM.jpeg"
+    ],
+    report: "The workshop equipped participants with essential version control concepts, preparing students to manage code repositories and collaborate on technical projects.",
+    featured: true
+  },
+  {
+    id: "milestone-6",
+    slug: "open-house-meet-2026",
+    title: "HackIT Open House Meet",
+    category: "Open House",
+    date: "21 September 2026",
+    startDate: "2026-09-21",
+    endDate: "2026-09-21",
+    status: "Completed",
+    venue: "A3 Complex, SGGSIE&T, Nanded",
+    venueDisplay: "A3 Complex, SGGSIE&T",
+    summary: "An introduction to HackIT, its technical domains, and the opportunities available to students interested in cybersecurity, software development, and technology.",
+    description: "HackIT Open House Meet introduced students to the club's mission, technical domains, and student-driven activities. The session provided an overview of the community, opportunities to learn and collaborate, and ways to participate in technical events, workshops, and practical projects.",
+    highlights: [
+      "Introduction to HackIT and its objectives",
+      "Overview of technical domains and learning opportunities",
+      "Introduction to club activities and student participation",
+      "Opportunities for collaboration and hands-on learning"
+    ],
+    domains: ["Cybersecurity", "Software Development", "Community", "Open Source"],
+    participants: "SGGSIE&T Students",
+    prizes: "",
+    coverImage: "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.23 PM.jpeg",
+    gallery: [
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.23 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 10.24.28 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.56.29 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.56.33 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.56.35 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.24 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.26 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.27 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.28 PM.jpeg",
+      "/images/event-media/open-house-meet/WhatsApp Image 2026-09-21 at 8.57.29 PM.jpeg"
+    ],
+    report: "The session successfully introduced students to HackIT's technical tracks, fostering interest in collaborative development, cybersecurity domains, and club initiatives.",
+    featured: true
+  },
+  {
+    id: "milestone-7",
+    slug: "commitrush-2026",
+    title: "COMMITRUSH 2026",
+    subtitle: "21-Day Open Source Contribution Challenge",
+    category: "Open Source Challenge",
+    date: "22 September – 12 October 2026",
+    startDate: "2026-09-22",
+    endDate: "2026-10-12",
+    status: "Ongoing",
+    venue: "Online",
+    venueDisplay: "Online",
+    summary: "A 21-day open-source contribution challenge encouraging students to explore real-world projects, improve their development workflows, and build consistent contribution habits.",
+    description: "COMMITRUSH 2026 is a 21-day open-source contribution challenge running from 22 September to 12 October 2026. The initiative encourages participants to explore open-source projects, learn collaborative development practices, and contribute to software repositories throughout the challenge. It provides a structured opportunity to practice version control, work with existing codebases, and build a contribution history.",
+    highlights: [
+      "21-day open-source contribution challenge",
+      "Hands-on exposure to collaborative software development",
+      "Practice with Git, GitHub, and repository workflows",
+      "Encouragement to build consistent contribution habits"
+    ],
+    domains: ["Open Source", "Git", "GitHub", "Full-Stack Development"],
+    participants: "Open to all students",
+    prizes: "Certificates and challenge recognition",
+    coverImage: "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-47-51.png",
+    gallery: [
+      "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-47-51.png",
+      "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-48-05.png",
+      "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-48-15.png",
+      "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-48-25.png",
+      "/images/event-media/commit-rush/Screenshot From 2026-10-10 15-48-35.png"
+    ],
+    report: "A 21-day initiative establishing collaborative open-source contribution workflows and empowering students to contribute to software repositories.",
+    featured: true
   }
 ];
 

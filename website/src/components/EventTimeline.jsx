@@ -23,17 +23,33 @@ export function EventTimeline({ events }) {
                 
                 <div className="space-y-3 max-w-2xl">
                   {/* Category & Date */}
-                  <div className="flex items-center gap-3 text-xs">
+                  <div className="flex flex-wrap items-center gap-3 text-xs">
                     <span className="px-2.5 py-0.5 bg-accent-subtle text-accent font-bold rounded-full uppercase">
                       {event.category}
                     </span>
                     <span className="text-text-secondary font-semibold font-mono">{event.date}</span>
+                    {event.status && (
+                      <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase ${
+                        event.status === 'Ongoing'
+                          ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
+                          : 'bg-surface-secondary text-text-secondary border border-border'
+                      }`}>
+                        {event.status}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-lg font-bold text-text-primary group-hover/card:text-accent transition-colors duration-300 leading-snug">
-                    {event.title}
-                  </h3>
+                  {/* Title & Subtitle */}
+                  <div>
+                    <h3 className="text-lg font-bold text-text-primary group-hover/card:text-accent transition-colors duration-300 leading-snug">
+                      {event.title}
+                    </h3>
+                    {event.subtitle && (
+                      <p className="text-xs text-accent font-semibold font-mono uppercase tracking-wide mt-1">
+                        {event.subtitle}
+                      </p>
+                    )}
+                  </div>
 
                   {/* Summary */}
                   <p className="text-sm text-text-secondary leading-relaxed">
@@ -55,7 +71,7 @@ export function EventTimeline({ events }) {
                 <div className="w-full md:w-auto shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-surface-secondary/80 flex justify-between items-center md:justify-end gap-6 text-xs">
                   <div className="flex items-center gap-1.5 text-text-secondary font-medium">
                     <span className="material-symbols-outlined text-sm text-accent">location_on</span>
-                    <span>{event.venue}</span>
+                    <span>{event.venueDisplay || event.venue}</span>
                   </div>
                   
                   <Link

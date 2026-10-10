@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
 import { milestonesData } from '../data/eventsData';
@@ -12,16 +11,24 @@ export function Events() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const shouldReduceMotion = useReducedMotion();
 
-  const categories = ['All', 'Quiz Competition', 'Open House', 'Hackathon Selection', 'Coding Competition'];
+  // Dynamically extract categories from milestonesData preserving order of appearance
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(milestonesData.map((evt) => evt.category)));
+    return ['All', ...unique];
+  }, []);
 
   // Filter events based on search query and selected category
   const filteredEvents = useMemo(() => {
     return milestonesData.filter((evt) => {
+      const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        evt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        evt.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        evt.venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        evt.category.toLowerCase().includes(searchQuery.toLowerCase());
+        !query ||
+        evt.title.toLowerCase().includes(query) ||
+        (evt.subtitle && evt.subtitle.toLowerCase().includes(query)) ||
+        evt.summary.toLowerCase().includes(query) ||
+        evt.venue.toLowerCase().includes(query) ||
+        (evt.venueDisplay && evt.venueDisplay.toLowerCase().includes(query)) ||
+        evt.category.toLowerCase().includes(query);
 
       const matchesCategory =
         selectedCategory === 'All' || evt.category.toLowerCase() === selectedCategory.toLowerCase();

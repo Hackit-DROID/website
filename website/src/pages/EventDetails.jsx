@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PageTransition } from '../components/PageTransition';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
@@ -5,6 +6,22 @@ import { milestonesData } from '../data/eventsData';
 
 export function EventDetails() {
   const { slug } = useParams();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Close lightbox on Escape key and lock body scroll
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+    if (selectedImage) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedImage]);
   
   // Find current event
   const currentIdx = milestonesData.findIndex((evt) => evt.slug === slug);
@@ -39,15 +56,46 @@ export function EventDetails() {
   const prevEvent = milestonesData[(currentIdx - 1 + totalEvents) % totalEvents];
   const nextEvent = milestonesData[(currentIdx + 1) % totalEvents];
 
+  // Helper to get descriptive image alt text
+  const getImageAlt = (imgUrl, eventTitle, idx) => {
+    if (imgUrl.includes('github-kickstart')) {
+      return 'GitHub Kickstart official workshop poster detailing Git fundamentals and repository workflows';
+    }
+    if (imgUrl.includes('commit-rush')) {
+      if (imgUrl.includes('15-47-51')) return 'COMMITRUSH 2026 challenge platform landing page and kickoff details';
+      if (imgUrl.includes('15-48-05')) return 'COMMITRUSH 2026 Issues Explorer interface with repository task filters';
+      if (imgUrl.includes('15-48-15')) return 'COMMITRUSH 2026 contribution leaderboard showing ranked participant scores';
+      if (imgUrl.includes('15-48-25')) return 'COMMITRUSH 2026 Projects Explorer browsing tracked open source repositories';
+      if (imgUrl.includes('15-48-35')) return 'COMMITRUSH 2026 challenge overview and contribution workflow philosophy';
+      return `${eventTitle} platform interface preview ${idx + 1}`;
+    }
+    if (imgUrl.includes('open-house-meet')) {
+      if (imgUrl.includes('8.57.23')) return 'HackIT Open House Meet stage presentation and welcome blackboard at A3 Complex';
+      if (imgUrl.includes('10.24.28')) return 'Students participating in Q&A discussion during HackIT Open House Meet';
+      if (imgUrl.includes('8.56.29')) return 'Student attendees seated during HackIT Open House orientation session';
+      if (imgUrl.includes('8.56.33')) return 'HackIT Open House presentation explaining technical domains to attendees';
+      if (imgUrl.includes('8.56.35')) return 'Participants attending the HackIT Open House introduction at A3 Complex';
+      if (imgUrl.includes('8.57.24')) return 'Front rows of student participants at HackIT Open House Meet';
+      if (imgUrl.includes('8.57.26')) return 'Audience of students listening to HackIT club activities introduction';
+      if (imgUrl.includes('8.57.27')) return 'HackIT coordinators presenting club domains at A3 Complex hall';
+      if (imgUrl.includes('8.57.28')) return 'Classroom view of attendees during HackIT Open House Meet session';
+      if (imgUrl.includes('8.57.29')) return 'Interactive discussion between student participants and HackIT team';
+      return `${eventTitle} photograph ${idx + 1}`;
+    }
+    return `${eventTitle} gallery photograph ${idx + 1}`;
+  };
+
   // Helper to map icons for highlights
   const getHighlightIcon = (text) => {
     const t = text.toLowerCase();
     if (t.includes('participant') || t.includes('student') || t.includes('freshmen')) return 'groups';
-    if (t.includes('prize') || t.includes('cash') || t.includes('₹')) return 'workspace_premium';
-    if (t.includes('round') || t.includes('competition') || t.includes('stage')) return 'sports_esports';
+    if (t.includes('prize') || t.includes('cash') || t.includes('₹') || t.includes('reward')) return 'workspace_premium';
+    if (t.includes('round') || t.includes('competition') || t.includes('stage') || t.includes('challenge')) return 'sports_esports';
     if (t.includes('national') || t.includes('nominee') || t.includes('sih')) return 'stars';
-    if (t.includes('showcase') || t.includes('project')) return 'rocket_launch';
+    if (t.includes('showcase') || t.includes('project') || t.includes('open-source')) return 'rocket_launch';
     if (t.includes('dignitary') || t.includes('director')) return 'account_balance';
+    if (t.includes('git') || t.includes('github') || t.includes('version control') || t.includes('workflow')) return 'code';
+    if (t.includes('domain') || t.includes('learning')) return 'psychology';
     return 'check_circle';
   };
 
@@ -73,17 +121,32 @@ export function EventDetails() {
               <span className="px-3.5 py-1 bg-accent-subtle text-accent text-xs font-bold tracking-wide rounded-full uppercase">
                 {event.category}
               </span>
-              <span className="text-xs text-text-secondary font-semibold flex items-center gap-1">
+              <span className="text-xs text-text-secondary font-semibold flex items-center gap-1 font-mono">
                 <span className="material-symbols-outlined text-xs">calendar_month</span>
                 {event.date}
               </span>
+              {event.status && (
+                <span className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase ${
+                  event.status === 'Ongoing'
+                    ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
+                    : 'bg-surface-secondary text-text-secondary border border-border'
+                }`}>
+                  {event.status}
+                </span>
+              )}
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-text-primary leading-tight tracking-tight uppercase mb-6">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-text-primary leading-tight tracking-tight uppercase mb-2">
               {event.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-6 text-sm text-text-secondary font-medium">
+            {event.subtitle && (
+              <p className="text-base sm:text-lg text-accent font-semibold font-mono tracking-wide mb-6">
+                {event.subtitle}
+              </p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-text-secondary font-medium pt-2">
               <div className="flex items-center gap-2 bg-surface-secondary px-4 py-2 rounded-[12px] border border-border">
                 <span className="material-symbols-outlined text-base text-accent">location_on</span>
                 <span>{event.venue}</span>
@@ -142,20 +205,35 @@ export function EventDetails() {
 
               {/* Photo Gallery */}
               <AnimatedSection className="space-y-6">
-                <h2 className="text-lg font-bold uppercase tracking-wider text-text-primary border-l-2 border-accent pl-3.5">
-                  Media Gallery
-                </h2>
+                <div className="flex items-center justify-between border-l-2 border-accent pl-3.5">
+                  <h2 className="text-lg font-bold uppercase tracking-wider text-text-primary">
+                    Media Gallery {event.gallery && event.gallery.length > 0 && `(${event.gallery.length})`}
+                  </h2>
+                  {event.gallery && event.gallery.length > 0 && (
+                    <span className="text-xs text-text-secondary font-mono">Click to enlarge</span>
+                  )}
+                </div>
 
                 {event.gallery && event.gallery.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {event.gallery.map((imgUrl, idx) => (
-                      <div key={idx} className="bg-surface border border-border overflow-hidden rounded-[20px] aspect-[4/3] group relative shadow-soft">
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setSelectedImage(imgUrl)}
+                        className="bg-surface border border-border overflow-hidden rounded-[20px] aspect-[4/3] group relative shadow-soft cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-accent"
+                        aria-label={`View enlarged photograph ${idx + 1} of ${event.title}`}
+                      >
                         <img 
                           src={imgUrl} 
-                          alt={`${event.title} gallery ${idx + 1}`}
+                          alt={getImageAlt(imgUrl, event.title, idx)}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                          loading="lazy"
                         />
-                      </div>
+                        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="material-symbols-outlined text-white text-3xl drop-shadow-md">zoom_in</span>
+                        </div>
+                      </button>
                     ))}
                   </div>
                 ) : (
@@ -269,6 +347,33 @@ export function EventDetails() {
           </div>
 
         </div>
+
+        {/* Lightbox Modal */}
+        {selectedImage && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-md transition-all"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div
+              className="relative max-w-4xl max-h-[90vh] bg-surface border border-border rounded-[24px] overflow-hidden shadow-2xl p-2 flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-background/80 hover:bg-background border border-border text-text-primary flex items-center justify-center transition-colors cursor-pointer shadow-sm text-sm font-bold"
+                aria-label="Close enlarged view"
+              >
+                ✕
+              </button>
+              <img
+                src={selectedImage}
+                alt={getImageAlt(selectedImage, event.title, 0)}
+                className="max-h-[82vh] w-auto max-w-full object-contain rounded-[18px]"
+              />
+            </div>
+          </div>
+        )}
       </main>
     </PageTransition>
   );
