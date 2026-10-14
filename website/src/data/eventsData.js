@@ -190,8 +190,129 @@ export const milestonesData = [
     ],
     report: "A 21-day initiative establishing collaborative open-source contribution workflows and empowering students to contribute to software repositories.",
     featured: true
+  },
+  {
+    id: "milestone-8",
+    slug: "ai-build-competition",
+    title: "AI Build Competition",
+    category: "Technical Competition",
+    date: "17 October 2026",
+    startDate: "2026-10-17",
+    endDate: "2026-10-17",
+    status: "Upcoming",
+    summary: "A competitive, AI-focused build challenge encouraging students to develop practical AI-based solutions.",
+    description: "A competitive, AI-focused build challenge designed to encourage broad student participation and practical application of artificial intelligence. Participants will have an opportunity to explore ideas and develop AI-based solutions through a technology-focused competition.",
+    highlights: [
+      "AI-focused build challenge",
+      "Practical artificial intelligence solutions",
+      "Broad student participation & idea exploration",
+      "Technology-focused competition"
+    ],
+    domains: ["Artificial Intelligence", "Machine Learning", "Software Development", "Problem Solving"],
+    gallery: [],
+    featured: true
+  },
+  {
+    id: "milestone-9",
+    slug: "code-clash-3",
+    title: "Code Clash 3.0",
+    category: "Tech Fest / Competitive Programming",
+    date: "29 December 2026",
+    startDate: "2026-12-29",
+    endDate: "2026-12-29",
+    status: "Upcoming",
+    summary: "HackIT's annual competitive programming event focused on coding speed, algorithms, data structures, logical thinking, and problem-solving.",
+    description: "Code Clash 3.0 is HackIT's annual competitive programming event, designed to challenge students' coding speed, algorithmic thinking, understanding of data structures, and logical reasoning. The event focuses on solving programming problems efficiently under time constraints.",
+    highlights: [
+      "Annual competitive programming event",
+      "Algorithmic thinking & data structures",
+      "Speed coding & logical reasoning",
+      "Time-constrained problem solving"
+    ],
+    domains: ["Competitive Programming", "Algorithms", "Data Structures", "Problem Solving"],
+    gallery: [],
+    featured: true
+  },
+  {
+    id: "milestone-10",
+    slug: "red-team-jailbreak",
+    title: "Red Team: Jailbreak",
+    category: "Technical Competition / AI Security",
+    date: "30 December 2026",
+    startDate: "2026-12-30",
+    endDate: "2026-12-30",
+    status: "Upcoming",
+    teamSize: "1–2 members",
+    challengeStructure: "Six progressive LLM defenses",
+    summary: "An AI-security CTF-style competition in which teams attempt to bypass six progressive LLM defenses.",
+    description: "Red Team: Jailbreak is an AI-security, capture-the-flag-style competition in which teams of one or two members attempt to bypass six progressively challenging large language model defenses. The challenge focuses on prompt injection, creative reasoning, and obfuscation techniques to capture hidden flags.",
+    highlights: [
+      "AI-security capture-the-flag (CTF) competition",
+      "Teams of 1–2 members",
+      "Six progressive LLM defenses",
+      "Prompt injection & obfuscation techniques"
+    ],
+    domains: ["AI Security", "Red Teaming", "Prompt Injection", "CTF"],
+    gallery: [],
+    featured: true
+  },
+  {
+    id: "milestone-11",
+    slug: "hackathon",
+    title: "Hackathon",
+    category: "Technical Event",
+    date: "21 February 2027",
+    startDate: "2027-02-21",
+    endDate: "2027-02-21",
+    status: "Upcoming",
+    summary: "HackIT's flagship hackathon focused on real-world problem-solving, rapid prototyping, innovation, and functional technology solutions.",
+    description: "The HackIT flagship hackathon is designed to bring students together to solve real-world problems through collaboration, rapid prototyping, and innovation. Participants will have an opportunity to develop practical technology solutions and turn ideas into functional prototypes.",
+    highlights: [
+      "HackIT flagship hackathon",
+      "Real-world problem-solving & collaboration",
+      "Rapid prototyping & innovation",
+      "Turning ideas into functional prototypes"
+    ],
+    domains: ["Hackathon", "Product Innovation", "Rapid Prototyping", "Full-Stack Development"],
+    gallery: [],
+    featured: true
+  },
+  {
+    id: "milestone-12",
+    slug: "cp-competition",
+    title: "CP Competition",
+    category: "Competitive Programming",
+    date: "10 March 2027",
+    startDate: "2027-03-10",
+    endDate: "2027-03-10",
+    status: "Upcoming",
+    summary: "An end-of-year competitive programming contest focused on algorithms, data structures, coding efficiency, and logical reasoning.",
+    description: "The CP Competition is an end-of-year programming contest focused on algorithmic problem-solving, data structures, coding efficiency, and logical reasoning. The event aims to give students an opportunity to strengthen their competitive programming skills and prepare for higher-level programming competitions.",
+    highlights: [
+      "End-of-year programming contest",
+      "Algorithmic problem-solving & data structures",
+      "Coding efficiency & logical reasoning",
+      "Preparation for higher-level competitions"
+    ],
+    domains: ["Competitive Programming", "Algorithms", "Data Structures", "Coding Efficiency"],
+    gallery: [],
+    featured: true
   }
 ];
+
+export const getEventStatus = (event) => {
+  if (!event) return null;
+  if (event.startDate && event.endDate) {
+    const now = new Date();
+    const start = new Date(event.startDate + 'T00:00:00');
+    const end = new Date(event.endDate + 'T23:59:59');
+    if (now < start) return 'Upcoming';
+    if (now >= start && now <= end) return 'Ongoing';
+    if (event.status === 'Ongoing') return 'Ongoing';
+    return 'Completed';
+  }
+  return event.status || 'Completed';
+};
 
 export const whatsNextData = [
   {

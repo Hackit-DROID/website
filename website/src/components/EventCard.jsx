@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getEventStatus } from '../data/eventsData';
 
 export function EventCard({ event }) {
   const [imgError, setImgError] = useState(false);
@@ -7,8 +8,7 @@ export function EventCard({ event }) {
 
   const coverImage = event.coverImage || (event.gallery && event.gallery.length > 0 ? event.gallery[0] : null);
   const displayVenue = event.venueDisplay || event.venue;
-  const isOngoing = event.status === 'Ongoing' || (event.startDate && event.endDate && new Date() >= new Date(event.startDate) && new Date() <= new Date(event.endDate + 'T23:59:59'));
-  const status = event.status || (isOngoing ? 'Ongoing' : 'Completed');
+  const status = getEventStatus(event);
 
   return (
     <article className="bg-surface border border-border p-5 sm:p-6 h-full flex flex-col justify-between card-hover group shadow-soft hover:shadow hover:border-border-hover rounded-[24px] transition-all duration-300">
@@ -34,6 +34,8 @@ export function EventCard({ event }) {
               className={`absolute top-2.5 right-2.5 px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-wider backdrop-blur-md shadow-sm ${
                 status === 'Ongoing'
                   ? 'bg-amber-500/90 text-white'
+                  : status === 'Upcoming'
+                  ? 'bg-accent text-white'
                   : 'bg-surface/90 text-text-secondary border border-border'
               }`}
             >
@@ -82,10 +84,12 @@ export function EventCard({ event }) {
 
       {/* Footer */}
       <div className="pt-4 border-t border-surface-secondary space-y-4 text-xs">
-        <div className="flex items-center gap-1.5 text-text-secondary font-medium">
-          <span className="material-symbols-outlined text-sm text-accent">location_on</span>
-          <span className="line-clamp-1">{displayVenue}</span>
-        </div>
+        {displayVenue && (
+          <div className="flex items-center gap-1.5 text-text-secondary font-medium">
+            <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+            <span className="line-clamp-1">{displayVenue}</span>
+          </div>
+        )}
         {event.prizes && (
           <div className="flex items-center gap-1.5 text-accent font-bold">
             <span className="material-symbols-outlined text-sm">workspace_premium</span>

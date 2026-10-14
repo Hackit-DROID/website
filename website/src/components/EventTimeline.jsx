@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AnimatedCard } from './AnimatedSection';
+import { getEventStatus } from '../data/eventsData';
 
 export function EventTimeline({ events }) {
   if (!events || events.length === 0) return null;
@@ -7,6 +8,9 @@ export function EventTimeline({ events }) {
   return (
     <div className="relative border-l border-border/80 ml-4 md:ml-6 space-y-12 py-4">
       {events.map((event, index) => {
+        const status = getEventStatus(event);
+        const displayVenue = event.venueDisplay || event.venue;
+
         return (
           <div key={event.id} className="relative pl-8 md:pl-10 group">
             {/* Timeline Dot & Ring */}
@@ -28,13 +32,15 @@ export function EventTimeline({ events }) {
                       {event.category}
                     </span>
                     <span className="text-text-secondary font-semibold font-mono">{event.date}</span>
-                    {event.status && (
+                    {status && (
                       <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase ${
-                        event.status === 'Ongoing'
+                        status === 'Ongoing'
                           ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
+                          : status === 'Upcoming'
+                          ? 'bg-accent/20 text-accent border border-accent/30'
                           : 'bg-surface-secondary text-text-secondary border border-border'
                       }`}>
-                        {event.status}
+                        {status}
                       </span>
                     )}
                   </div>
@@ -68,11 +74,15 @@ export function EventTimeline({ events }) {
                 </div>
 
                 {/* Navigation Button */}
-                <div className="w-full md:w-auto shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-surface-secondary/80 flex justify-between items-center md:justify-end gap-6 text-xs">
-                  <div className="flex items-center gap-1.5 text-text-secondary font-medium">
-                    <span className="material-symbols-outlined text-sm text-accent">location_on</span>
-                    <span>{event.venueDisplay || event.venue}</span>
-                  </div>
+                <div className={`w-full md:w-auto shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-surface-secondary/80 flex items-center gap-6 text-xs ${
+                  displayVenue ? 'justify-between md:justify-end' : 'justify-end'
+                }`}>
+                  {displayVenue && (
+                    <div className="flex items-center gap-1.5 text-text-secondary font-medium">
+                      <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+                      <span>{displayVenue}</span>
+                    </div>
+                  )}
                   
                   <Link
                     to={`/events/${event.slug}`}

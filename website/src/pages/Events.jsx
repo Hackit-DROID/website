@@ -26,7 +26,8 @@ export function Events() {
         evt.title.toLowerCase().includes(query) ||
         (evt.subtitle && evt.subtitle.toLowerCase().includes(query)) ||
         evt.summary.toLowerCase().includes(query) ||
-        evt.venue.toLowerCase().includes(query) ||
+        (evt.description && evt.description.toLowerCase().includes(query)) ||
+        (evt.venue && evt.venue.toLowerCase().includes(query)) ||
         (evt.venueDisplay && evt.venueDisplay.toLowerCase().includes(query)) ||
         evt.category.toLowerCase().includes(query);
 

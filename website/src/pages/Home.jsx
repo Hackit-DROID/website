@@ -227,8 +227,12 @@ export function Home() {
                   </div>
                   <div className="pt-4 border-t border-surface-secondary text-xs text-text-secondary flex items-center justify-between font-medium">
                     <div className="flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-accent">location_on</span>
-                      <span>{evt.venue}</span>
+                      {evt.venue && (
+                        <>
+                          <span className="material-symbols-outlined text-sm text-accent">location_on</span>
+                          <span>{evt.venue}</span>
+                        </>
+                      )}
                     </div>
                     <span className="text-accent group-hover:text-accent-hover font-bold flex items-center gap-1.5 transition-all">
                       Read Story

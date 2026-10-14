@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PageTransition } from '../components/PageTransition';
 import { AnimatedSection, AnimatedCard } from '../components/AnimatedSection';
-import { milestonesData } from '../data/eventsData';
+import { milestonesData, getEventStatus } from '../data/eventsData';
 
 export function EventDetails() {
   const { slug } = useParams();
@@ -26,6 +26,7 @@ export function EventDetails() {
   // Find current event
   const currentIdx = milestonesData.findIndex((evt) => evt.slug === slug);
   const event = milestonesData[currentIdx];
+  const status = getEventStatus(event);
 
   // If event doesn't exist, show an error page
   if (!event) {
@@ -99,12 +100,16 @@ export function EventDetails() {
     const t = text.toLowerCase();
     if (t.includes('participant') || t.includes('student') || t.includes('freshmen')) return 'groups';
     if (t.includes('prize') || t.includes('cash') || t.includes('₹') || t.includes('reward')) return 'workspace_premium';
-    if (t.includes('round') || t.includes('competition') || t.includes('stage') || t.includes('challenge')) return 'sports_esports';
+    if (t.includes('round') || t.includes('stage') || t.includes('challenge')) return 'sports_esports';
     if (t.includes('national') || t.includes('nominee') || t.includes('sih')) return 'stars';
     if (t.includes('showcase') || t.includes('project') || t.includes('open-source')) return 'rocket_launch';
     if (t.includes('dignitary') || t.includes('director')) return 'account_balance';
     if (t.includes('git') || t.includes('github') || t.includes('version control') || t.includes('workflow')) return 'code';
-    if (t.includes('domain') || t.includes('learning')) return 'psychology';
+    if (t.includes('ai') || t.includes('intelligence') || t.includes('llm') || t.includes('domain') || t.includes('learning')) return 'psychology';
+    if (t.includes('security') || t.includes('defense') || t.includes('red team') || t.includes('jailbreak')) return 'security';
+    if (t.includes('ctf') || t.includes('flag')) return 'flag';
+    if (t.includes('hackathon') || t.includes('prototype') || t.includes('prototyping')) return 'bolt';
+    if (t.includes('speed coding') || t.includes('algorithm') || t.includes('data structure') || t.includes('competition') || t.includes('contest')) return 'terminal';
     return 'check_circle';
   };
 
@@ -134,13 +139,15 @@ export function EventDetails() {
                 <span className="material-symbols-outlined text-xs">calendar_month</span>
                 {event.date}
               </span>
-              {event.status && (
+              {status && (
                 <span className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase ${
-                  event.status === 'Ongoing'
+                  status === 'Ongoing'
                     ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
+                    : status === 'Upcoming'
+                    ? 'bg-accent/20 text-accent border border-accent/30'
                     : 'bg-surface-secondary text-text-secondary border border-border'
                 }`}>
-                  {event.status}
+                  {status}
                 </span>
               )}
             </div>
@@ -155,18 +162,22 @@ export function EventDetails() {
               </p>
             )}
 
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-text-secondary font-medium pt-2">
-              <div className="flex items-center gap-2 bg-surface-secondary px-4 py-2 rounded-[12px] border border-border">
-                <span className="material-symbols-outlined text-base text-accent">location_on</span>
-                <span>{event.venue}</span>
+            {(event.venue || event.prizes) && (
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-text-secondary font-medium pt-2">
+                {event.venue && (
+                  <div className="flex items-center gap-2 bg-surface-secondary px-4 py-2 rounded-[12px] border border-border">
+                    <span className="material-symbols-outlined text-base text-accent">location_on</span>
+                    <span>{event.venue}</span>
+                  </div>
+                )}
+                {event.prizes && (
+                  <div className="flex items-center gap-2 bg-accent-subtle px-4 py-2 rounded-[12px] border border-accent/10 text-accent font-bold">
+                    <span className="material-symbols-outlined text-base">workspace_premium</span>
+                    <span>{event.prizes}</span>
+                  </div>
+                )}
               </div>
-              {event.prizes && (
-                <div className="flex items-center gap-2 bg-accent-subtle px-4 py-2 rounded-[12px] border border-accent/10 text-accent font-bold">
-                  <span className="material-symbols-outlined text-base">workspace_premium</span>
-                  <span>{event.prizes}</span>
-                </div>
-              )}
-            </div>
+            )}
           </AnimatedSection>
 
           {/* Split Content & Sidebar */}
@@ -268,44 +279,80 @@ export function EventDetails() {
                 <div className="bg-surface border border-border p-6 rounded-[24px] shadow-soft space-y-6">
                   
                   {/* Domains */}
-                  <div>
-                    <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block mb-3">
-                      Domains Covered
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {event.domains.map((dom) => (
-                        <span 
-                          key={dom}
-                          className="px-2.5 py-1 bg-surface-secondary text-text-secondary hover:text-accent font-mono text-[10px] font-bold rounded-[6px] border border-border transition-colors duration-200"
-                        >
-                          #{dom.replace(/\s+/g, '')}
-                        </span>
-                      ))}
+                  {event.domains && event.domains.length > 0 && (
+                    <div>
+                      <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block mb-3">
+                        Domains Covered
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {event.domains.map((dom) => (
+                          <span
+                            key={dom}
+                            className="px-2.5 py-1 bg-surface-secondary text-text-secondary hover:text-accent font-mono text-[10px] font-bold rounded-[6px] border border-border transition-colors duration-200"
+                          >
+                            #{dom.replace(/\s+/g, '')}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* Team Size */}
+                  {event.teamSize && (
+                    <div className="pt-5 border-t border-border/60 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-surface-secondary text-text-secondary flex items-center justify-center rounded-lg">
+                          <span className="material-symbols-outlined text-base">group</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-text-secondary block font-semibold uppercase leading-none mb-0.5">Team Size</span>
+                          <span className="text-xs font-bold text-text-primary">{event.teamSize}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Challenge Structure */}
+                  {event.challengeStructure && (
+                    <div className="pt-5 border-t border-border/60 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-surface-secondary text-text-secondary flex items-center justify-center rounded-lg">
+                          <span className="material-symbols-outlined text-base">shield</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-text-secondary block font-semibold uppercase leading-none mb-0.5">Structure</span>
+                          <span className="text-xs font-bold text-text-primary">{event.challengeStructure}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Stats / Attendance */}
-                  <div className="pt-5 border-t border-border/60 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-surface-secondary text-text-secondary flex items-center justify-center rounded-lg">
-                        <span className="material-symbols-outlined text-base">groups</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-text-secondary block font-semibold uppercase leading-none mb-0.5">Reach</span>
-                        <span className="text-xs font-bold text-text-primary">{event.participants}</span>
+                  {event.participants && (
+                    <div className="pt-5 border-t border-border/60 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-surface-secondary text-text-secondary flex items-center justify-center rounded-lg">
+                          <span className="material-symbols-outlined text-base">groups</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-text-secondary block font-semibold uppercase leading-none mb-0.5">Reach</span>
+                          <span className="text-xs font-bold text-text-primary">{event.participants}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Impact & Outcome */}
-                  <div className="pt-5 border-t border-border/60">
-                    <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block mb-2">
-                      Outcome Report
-                    </span>
-                    <p className="text-xs text-text-secondary leading-relaxed">
-                      {event.report}
-                    </p>
-                  </div>
+                  {event.report && (
+                    <div className="pt-5 border-t border-border/60">
+                      <span className="text-xs font-bold text-text-secondary uppercase tracking-widest block mb-2">
+                        Outcome Report
+                      </span>
+                      <p className="text-xs text-text-secondary leading-relaxed">
+                        {event.report}
+                      </p>
+                    </div>
+                  )}
 
                 </div>
               </AnimatedSection>
