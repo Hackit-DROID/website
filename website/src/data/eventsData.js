@@ -166,7 +166,7 @@ export const milestonesData = [
     date: "22 September – 12 October 2026",
     startDate: "2026-09-22",
     endDate: "2026-10-12",
-    status: "Ongoing",
+    status: "Completed",
     venue: "Online",
     venueDisplay: "Online",
     summary: "A 21-day open-source contribution challenge encouraging students to explore real-world projects, improve their development workflows, and build consistent contribution habits.",
@@ -308,7 +308,6 @@ export const getEventStatus = (event) => {
     const end = new Date(event.endDate + 'T23:59:59');
     if (now < start) return 'Upcoming';
     if (now >= start && now <= end) return 'Ongoing';
-    if (event.status === 'Ongoing') return 'Ongoing';
     return 'Completed';
   }
   return event.status || 'Completed';
